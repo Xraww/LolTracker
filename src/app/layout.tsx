@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/common/Navbar";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,23 +19,15 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`${inter.className} bg-gray-950 text-white min-h-screen`}>
+            <body className={`${inter.className} bg-[rgb(13,13,13)] text-white min-h-screen`}>
                 <div className="flex flex-col min-h-screen">
-                    <header className="bg-gray-900 border-b border-gray-800">
-                        <div className="container mx-auto px-4 py-4">
-                            <Navbar />
-                        </div>
-                    </header>
+                    <Header />
 
-                    <main className="flex-grow container mx-auto px-4 py-8">
+                    <main className="w-full flex-grow">
                         {children}
                     </main>
 
-                    <footer className="bg-gray-900 border-t border-gray-800">
-                        <div className="container mx-auto px-4 py-6 text-center text-gray-400">
-                            <p>&copy; {new Date().getFullYear()} GG Tracker. All rights reserved.</p>
-                        </div>
-                    </footer>
+                    <Footer />
                 </div>
             </body>
         </html>
