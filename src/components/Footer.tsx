@@ -2,16 +2,19 @@
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faGithub, faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Footer() {
+    const { t } = useLanguage();
+
     return (
         <footer className="mt-20 w-full bg-gradient-to-br from-black to-valorant-dark text-white py-16">
             <div className="max-w-7xl mx-auto px-8 grid grid-cols-4 gap-12">
                 {/* About Section */}
                 <div className="col-span-1">
-                    <h4 className="text-xl font-bold mb-4 text-lol-gold">About Us</h4>
+                    <h4 className="text-xl font-bold mb-4 text-lol-gold">{t.footer.about.title}</h4>
                     <p className="text-gray-400 leading-relaxed">
-                        Providing the best gaming statistics and analysis for League of Legends and Valorant players.
+                        {t.footer.about.description}
                     </p>
                     <div className="flex gap-4 mt-6">
                         <a href="#" className="text-gray-400 hover:text-lol-gold transition-colors">
@@ -28,57 +31,81 @@ export default function Footer() {
 
                 {/* League of Legends Section */}
                 <div className="col-span-1">
-                    <h4 className="text-xl font-bold mb-4 text-lol-gold">League of Legends</h4>
+                    <h4 className="text-xl font-bold mb-4 text-lol-gold">{t.footer.leagueOfLegends.title}</h4>
                     <ul className="space-y-2">
                         <li>
-                            <a href="#" className="text-gray-400 hover:text-white transition-colors">Search Player</a>
+                            <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                                {t.footer.leagueOfLegends.searchPlayer}
+                            </a>
                         </li>
                         <li>
-                            <a href="#" className="text-gray-400 hover:text-white transition-colors">Leaderboard</a>
+                            <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                                {t.footer.leagueOfLegends.leaderboard}
+                            </a>
                         </li>
                         <li>
-                            <a href="#" className="text-gray-400 hover:text-white transition-colors">Pro Matches</a>
+                            <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                                {t.footer.leagueOfLegends.proMatches}
+                            </a>
                         </li>
                         <li>
-                            <a href="#" className="text-gray-400 hover:text-white transition-colors">Champions Stats</a>
+                            <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                                {t.footer.leagueOfLegends.championsStats}
+                            </a>
                         </li>
                     </ul>
                 </div>
 
                 {/* Valorant Section */}
                 <div className="col-span-1">
-                    <h4 className="text-xl font-bold mb-4 text-valorant-red">Valorant</h4>
+                    <h4 className="text-xl font-bold mb-4 text-valorant-red">{t.footer.valorant.title}</h4>
                     <ul className="space-y-2">
                         <li>
-                            <a href="#" className="text-gray-400 hover:text-white transition-colors">Search Player</a>
+                            <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                                {t.footer.valorant.searchPlayer}
+                            </a>
                         </li>
                         <li>
-                            <a href="#" className="text-gray-400 hover:text-white transition-colors">Leaderboard</a>
+                            <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                                {t.footer.valorant.leaderboard}
+                            </a>
                         </li>
                         <li>
-                            <a href="#" className="text-gray-400 hover:text-white transition-colors">Pro Matches</a>
+                            <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                                {t.footer.valorant.proMatches}
+                            </a>
                         </li>
                         <li>
-                            <a href="#" className="text-gray-400 hover:text-white transition-colors">Agents Stats</a>
+                            <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                                {t.footer.valorant.agentsStats}
+                            </a>
                         </li>
                     </ul>
                 </div>
 
                 {/* Resources Section */}
                 <div className="col-span-1">
-                    <h4 className="text-xl font-bold mb-4 text-white">Resources</h4>
+                    <h4 className="text-xl font-bold mb-4 text-white">{t.footer.resources.title}</h4>
                     <ul className="space-y-2">
                         <li>
-                            <a href="#" className="text-gray-400 hover:text-white transition-colors">Blog</a>
+                            <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                                {t.footer.resources.blog}
+                            </a>
                         </li>
                         <li>
-                            <a href="#" className="text-gray-400 hover:text-white transition-colors">API</a>
+                            <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                                {t.footer.resources.api}
+                            </a>
                         </li>
                         <li>
-                            <a href="#" className="text-gray-400 hover:text-white transition-colors">Support</a>
+                            <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                                {t.footer.resources.support}
+                            </a>
                         </li>
                         <li>
-                            <a href="#" className="text-gray-400 hover:text-white transition-colors">Contact</a>
+                            <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                                {t.footer.resources.contact}
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -87,10 +114,14 @@ export default function Footer() {
             {/* Bottom Bar */}
             <div className="max-w-7xl mx-auto px-8 mt-12 pt-8 border-t border-white/10">
                 <div className="flex justify-between items-center text-gray-400 text-sm">
-                    <p>&copy; {new Date().getFullYear()} GG.Tracker - Xraww. All rights reserved.</p>
+                    <p>{t.footer.bottom.rights.replace('{year}', new Date().getFullYear().toString())}</p>
                     <div className="flex gap-6">
-                        <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-                        <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+                        <a href="#" className="hover:text-white transition-colors">
+                            {t.footer.bottom.privacyPolicy}
+                        </a>
+                        <a href="#" className="hover:text-white transition-colors">
+                            {t.footer.bottom.termsOfService}
+                        </a>
                     </div>
                 </div>
             </div>

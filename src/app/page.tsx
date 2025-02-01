@@ -5,14 +5,43 @@ import {
     faChevronRight, 
     faCube, 
     faSquarePollVertical, 
-    faList, 
     faChartLine, 
     faTrophy, 
     faChartPie, 
     faUsers 
 } from "@fortawesome/free-solid-svg-icons";
+import Footer from "@/components/Footer";
+import { useLanguage } from "@/context/LanguageContext";
+import { en } from "@/translations/en";
+
+type FeatureTranslationKey = keyof typeof en.home.features;
+
+const features = [
+    {
+        icon: faChartLine,
+        translationKey: 'matchAnalytics' as const,
+        descriptionKey: 'matchAnalyticsDesc' as const,
+    },
+    {
+        icon: faTrophy,
+        translationKey: 'rankings' as const,
+        descriptionKey: 'rankingsDesc' as const,
+    },
+    {
+        icon: faChartPie,
+        translationKey: 'gameStats' as const,
+        descriptionKey: 'gameStatsDesc' as const,
+    },
+    {
+        icon: faUsers,
+        translationKey: 'proScene' as const,
+        descriptionKey: 'proSceneDesc' as const,
+    }
+] as const;
 
 export default function Home() {
+    const { t } = useLanguage();
+
     return (
         <div className="pt-[150px] flex flex-col gap-[100px] relative">
             {/* Background Gradients */}
@@ -32,24 +61,24 @@ export default function Home() {
                             className="h-[120px] object-contain transition-transform duration-300 hover:scale-105 drop-shadow-[0_0_20px_rgba(200,155,60,0.3)]"
                         />
                         <p className="text-xl text-gray-100 max-w-[400px] leading-relaxed">
-                            Track your performance, analyze matches, and climb the ranks.
+                            {t.lol.trackStats}
                         </p>
                         <div className="flex gap-4">
                             <button className="px-6 py-3 bg-lol-gold text-valorant-dark font-semibold rounded-lg hover:shadow-[0_5px_15px_rgba(200,155,60,0.3)] transition-all duration-300 hover:-translate-y-0.5">
-                                Search Player
+                                {t.common.searchPlayer}
                             </button>
                             <button className="px-6 py-3 bg-transparent text-white border-2 border-white/80 font-semibold rounded-lg hover:bg-white/10 transition-all duration-300 hover:-translate-y-0.5">
-                                Leaderboard
+                                {t.common.leaderboard}
                             </button>
                         </div>
                         <div className="flex gap-5">
                             <div className="animate-float px-5 py-3 bg-white/10 backdrop-blur rounded-xl flex items-center gap-3 border border-white/20">
                                 <FontAwesomeIcon icon={faChartLine} className="text-lol-gold text-lg"/>
-                                <span className="text-white font-medium text-sm">Match History</span>
+                                <span className="text-white font-medium text-sm">{t.common.stats}</span>
                             </div>
                             <div className="animate-float delay-1000 px-5 py-3 bg-white/10 backdrop-blur rounded-xl flex items-center gap-3 border border-white/20">
                                 <FontAwesomeIcon icon={faTrophy} className="text-lol-gold text-lg"/>
-                                <span className="text-white font-medium text-sm">Rankings</span>
+                                <span className="text-white font-medium text-sm">{t.common.leaderboard}</span>
                             </div>
                         </div>
                     </div>
@@ -67,24 +96,24 @@ export default function Home() {
                             className="h-[120px] object-contain transition-transform duration-300 hover:scale-105 drop-shadow-[0_0_20px_rgba(255,70,84,0.3)]"
                         />
                         <p className="text-xl text-gray-100 max-w-[400px] leading-relaxed">
-                            Master your agent performance and track your competitive progress.
+                            {t.valorant.trackStats}
                         </p>
                         <div className="flex gap-4">
                             <button className="px-6 py-3 bg-valorant-red text-white font-semibold rounded-lg hover:shadow-[0_5px_15px_rgba(255,70,84,0.3)] transition-all duration-300 hover:-translate-y-0.5">
-                                Search Player
+                                {t.common.searchPlayer}
                             </button>
                             <button className="px-6 py-3 bg-transparent text-white border-2 border-white/80 font-semibold rounded-lg hover:bg-white/10 transition-all duration-300 hover:-translate-y-0.5">
-                                Leaderboard
+                                {t.common.leaderboard}
                             </button>
                         </div>
                         <div className="flex gap-5">
                             <div className="animate-float px-5 py-3 bg-white/10 backdrop-blur rounded-xl flex items-center gap-3 border border-white/20">
                                 <FontAwesomeIcon icon={faChartPie} className="text-valorant-red text-lg"/>
-                                <span className="text-white font-medium text-sm">Agent Stats</span>
+                                <span className="text-white font-medium text-sm">{t.valorant.agents}</span>
                             </div>
                             <div className="animate-float delay-1000 px-5 py-3 bg-white/10 backdrop-blur rounded-xl flex items-center gap-3 border border-white/20">
                                 <FontAwesomeIcon icon={faTrophy} className="text-valorant-red text-lg"/>
-                                <span className="text-white font-medium text-sm">Rankings</span>
+                                <span className="text-white font-medium text-sm">{t.common.leaderboard}</span>
                             </div>
                         </div>
                     </div>
@@ -99,19 +128,18 @@ export default function Home() {
                     <span className="text-valorant-red text-xl uppercase tracking-[3px] font-semibold mb-6">
                         Explore
                     </span>
-                        <h2 className="text-5xl font-bold mb-6">
-                            Track Your Progress Across Games
-                        </h2>
-                        <p className="text-xl text-gray-300 mb-10 max-w-xl leading-relaxed">
-                            Dive into our platform to analyze your performance in both League of Legends and Valorant. 
-                            Get detailed statistics, competitive rankings, and stay ahead of the meta.
+                    <h2 className="text-5xl font-bold mb-6">
+                        {t.home.hero.title}
+                    </h2>
+                    <p className="text-xl text-gray-300 mb-10 max-w-xl leading-relaxed">
+                        {t.home.hero.subtitle}
                     </p>
                     <div className="flex gap-4">
-                            <button className="px-8 py-4 bg-valorant-red text-white font-semibold rounded-lg hover:shadow-[0_5px_15px_rgba(255,70,84,0.3)] transition-all duration-300 hover:-translate-y-0.5">
-                            Compare Players
+                        <button className="px-8 py-4 bg-valorant-red text-white font-semibold rounded-lg hover:shadow-[0_5px_15px_rgba(255,70,84,0.3)] transition-all duration-300 hover:-translate-y-0.5">
+                            {t.common.searchPlayer}
                         </button>
-                            <button className="px-8 py-4 bg-white/10 text-white font-semibold rounded-lg hover:bg-white/20 transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2">
-                                Explore Stats <FontAwesomeIcon icon={faChevronRight} className="text-sm" />
+                        <button className="px-8 py-4 bg-white/10 text-white font-semibold rounded-lg hover:bg-white/20 transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2">
+                            {t.common.stats} <FontAwesomeIcon icon={faChevronRight} className="text-sm" />
                         </button>
                     </div>
                 </div>
@@ -127,8 +155,12 @@ export default function Home() {
                                     icon={feature.icon} 
                                     className="text-3xl mb-4 text-valorant-red transition-colors"
                                 />
-                                <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-                                <p className="text-gray-400 leading-relaxed">{feature.description}</p>
+                                <h3 className="text-xl font-semibold mb-3">
+                                    {t.home.features[feature.translationKey]}
+                                </h3>
+                                <p className="text-gray-400 leading-relaxed">
+                                    {t.home.features[feature.descriptionKey]}
+                                </p>
                             </div>
                         ))}
                     </div>
@@ -141,50 +173,48 @@ export default function Home() {
                 
                 <div className="relative z-10 text-center mb-16">
                     <span className="text-lol-gold text-xl uppercase tracking-[3px] font-semibold mb-4 block">
-                        Statistics
+                        {t.home.stats.title}
                     </span>
-                    <h2 className="text-4xl font-bold mb-4">In-Depth Gaming Analytics</h2>
+                    <h2 className="text-4xl font-bold mb-4">{t.home.stats.subtitle}</h2>
                     <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-                        Access comprehensive statistics for both League of Legends and Valorant 
-                        to enhance your competitive gameplay.
+                        {t.home.stats.description}
                     </p>
                 </div>
 
                 <div className="grid grid-cols-3 gap-6 max-w-[1200px] mx-auto">
-                    <div className="p-8 bg-white/5 backdrop-blur rounded-2xl border border-white/10 hover:border-lol-gold/30 transition-all duration-300 hover:-translate-y-1 group">
-                        <FontAwesomeIcon icon={faSquarePollVertical} className="text-3xl mb-4 text-lol-gold" />
-                        <div>
-                            <h3 className="text-xl font-semibold mb-2">Performance Tracking</h3>
-                            <p className="text-gray-400 leading-relaxed">Real-time match analysis and detailed performance metrics for both games</p>
+                    {stats.map((stat, index) => (
+                        <div 
+                            key={index} 
+                            className={`p-8 ${
+                                stat.featured 
+                                    ? '-mt-6 bg-gradient-to-br from-lol-gold/20 to-black/60 backdrop-blur rounded-2xl border-2 border-lol-gold/30 hover:border-lol-gold/50 shadow-[0_0_15px_rgba(200,155,60,0.15)] transition-all duration-300 hover:-translate-y-2 relative' 
+                                    : 'bg-white/5 backdrop-blur rounded-2xl border border-white/10 hover:border-lol-gold/30 transition-all duration-300 hover:-translate-y-1'
+                            } group`}
+                        >
+                            {stat.featured && (
+                                <div className="absolute -top-4 right-6 px-4 py-1.5 bg-gradient-to-r from-lol-gold/20 to-black/60 text-lol-gold text-sm rounded-full border border-lol-gold/30 font-semibold shadow-lg">
+                                    {t.home.stats.popular}
+                                </div>
+                            )}
+                            <FontAwesomeIcon icon={stat.icon} className="text-3xl mb-4 text-lol-gold" />
+                            <div>
+                                <h3 className="text-xl font-semibold mb-2">
+                                    {t.home.stats[stat.translationKey]}
+                                </h3>
+                                <p className="text-gray-400 leading-relaxed">
+                                    {t.home.stats[stat.descriptionKey]}
+                                </p>
+                            </div>
                         </div>
-                    </div>
-
-                    <div className="p-8 -mt-6 bg-gradient-to-br from-lol-gold/20 to-black/60 backdrop-blur rounded-2xl border-2 border-lol-gold/30 hover:border-lol-gold/50 shadow-[0_0_15px_rgba(200,155,60,0.15)] transition-all duration-300 hover:-translate-y-2 group relative">
-                        <div className="absolute -top-4 right-6 px-4 py-1.5 bg-gradient-to-r from-lol-gold/20 to-black/60 text-lol-gold text-sm rounded-full border border-lol-gold/30 font-semibold shadow-lg">
-                            Popular
-                        </div>
-                        <FontAwesomeIcon icon={faTrophy} className="text-3xl mb-4 text-lol-gold" />
-                        <div>
-                            <h3 className="text-xl font-semibold mb-2">Rank Progress</h3>
-                            <p className="text-gray-400 leading-relaxed">Track your competitive journey from Iron to Radiant or Challenger</p>
-                        </div>
-                    </div>
-
-                    <div className="p-8 bg-white/5 backdrop-blur rounded-2xl border border-white/10 hover:border-lol-gold/30 transition-all duration-300 hover:-translate-y-1 group">
-                        <FontAwesomeIcon icon={faChartPie} className="text-3xl mb-4 text-lol-gold" />
-                        <div>
-                            <h3 className="text-xl font-semibold mb-2">Gameplay Analysis</h3>
-                            <p className="text-gray-400 leading-relaxed">Deep insights into your Champion and Agent performance</p>
-                        </div>
-                    </div>
+                    ))}
                 </div>
 
                 <div className="flex justify-center gap-4 mt-12">
                     <button className="px-8 py-4 bg-lol-gold text-valorant-dark font-semibold rounded-lg hover:shadow-[0_5px_15px_rgba(200,155,60,0.3)] transition-all duration-300 hover:-translate-y-0.5">
-                        Start Tracking
+                        {t.common.startTracking}
                     </button>
                     <button className="px-8 py-4 bg-white/10 text-white font-semibold rounded-lg hover:bg-white/20 transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2">
-                        View Leaderboards <FontAwesomeIcon icon={faChevronRight} className="text-sm" />
+                        {t.common.viewLeaderboards} <FontAwesomeIcon icon={faChevronRight} className="text-sm" />
                     </button>
                 </div>
             </section>
@@ -198,73 +228,42 @@ export default function Home() {
                     <div className="flex-1 bg-white/5 backdrop-blur rounded-2xl border border-white/10 p-8">
                         <div className="flex items-center gap-4 mb-8">
                             <FontAwesomeIcon icon={faChartLine} className="text-3xl text-valorant-red" />
-                            <h2 className="text-3xl font-bold">Track Your Journey</h2>
+                            <h2 className="text-3xl font-bold">{t.home.metrics.trackYourJourney}</h2>
                         </div>
                         <div className="grid grid-cols-3 gap-6">
-                            <div className="p-6 bg-white/5 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-1 text-center">
-                                <FontAwesomeIcon icon={faTrophy} className="text-2xl text-valorant-red mb-3" />
-                                <span className="block text-3xl font-bold mb-2">10M+</span>
-                                <p className="text-gray-400">Players Tracked</p>
-                            </div>
-                            <div className="p-6 bg-white/5 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-1 text-center">
-                                <FontAwesomeIcon icon={faChartPie} className="text-2xl text-valorant-red mb-3" />
-                                <span className="block text-3xl font-bold mb-2">50M+</span>
-                                <p className="text-gray-400">Matches Analyzed</p>
-                            </div>
-                            <div className="p-6 bg-white/5 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-1 text-center">
-                                <FontAwesomeIcon icon={faUsers} className="text-2xl text-valorant-red mb-3" />
-                                <span className="block text-3xl font-bold mb-2">100K+</span>
-                                <p className="text-gray-400">Daily Users</p>
-                            </div>
-                            <div className="p-6 bg-white/5 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-1 text-center">
-                                <FontAwesomeIcon icon={faChartLine} className="text-2xl text-valorant-red mb-3" />
-                                <span className="block text-3xl font-bold mb-2">1B+</span>
-                                <p className="text-gray-400">Stats Recorded</p>
-                            </div>
-                            <div className="p-6 bg-white/5 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-1 text-center">
-                                <FontAwesomeIcon icon={faSquarePollVertical} className="text-2xl text-valorant-red mb-3" />
-                                <span className="block text-3xl font-bold mb-2">2M+</span>
-                                <p className="text-gray-400">Profiles Created</p>
-                            </div>
-                            <div className="p-6 bg-white/5 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-1 text-center">
-                                <FontAwesomeIcon icon={faCube} className="text-2xl text-valorant-red mb-3" />
-                                <span className="block text-3xl font-bold mb-2">24/7</span>
-                                <p className="text-gray-400">Live Tracking</p>
-                            </div>
+                            {metrics.map((metric, index) => (
+                                <div 
+                                    key={index}
+                                    className="p-6 bg-white/5 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-1 text-center"
+                                >
+                                    <FontAwesomeIcon icon={metric.icon} className="text-2xl text-valorant-red mb-3" />
+                                    <span className="block text-3xl font-bold mb-2">{metric.value}</span>
+                                    <p className="text-gray-400">{t.home.metrics[metric.translationKey]}</p>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
                     {/* Features List */}
                     <div className="flex-1 flex flex-col gap-8 justify-center">
-                        <div className="p-6 bg-white/5 backdrop-blur rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-1 flex items-start gap-6">
-                            <div className="p-4 bg-valorant-red/10 rounded-xl">
-                                <FontAwesomeIcon icon={faChartLine} className="text-2xl text-valorant-red" />
+                        {features2.map((feature, index) => (
+                            <div 
+                                key={index}
+                                className="p-6 bg-white/5 backdrop-blur rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-1 flex items-start gap-6"
+                            >
+                                <div className="p-4 bg-valorant-red/10 rounded-xl">
+                                    <FontAwesomeIcon icon={feature.icon} className="text-2xl text-valorant-red" />
+                                </div>
+                                <div>
+                                    <h4 className="text-xl font-semibold mb-2">
+                                        {t.home.features2[feature.translationKey]}
+                                    </h4>
+                                    <p className="text-gray-400 leading-relaxed">
+                                        {t.home.features2[feature.descriptionKey]}
+                                    </p>
+                                </div>
                             </div>
-                            <div>
-                                <h4 className="text-xl font-semibold mb-2">Real-time Stats</h4>
-                                <p className="text-gray-400 leading-relaxed">Track your performance as you play with instant updates and detailed analytics</p>
-                            </div>
-                        </div>
-
-                        <div className="p-6 bg-white/5 backdrop-blur rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-1 flex items-start gap-6">
-                            <div className="p-4 bg-valorant-red/10 rounded-xl">
-                                <FontAwesomeIcon icon={faSquarePollVertical} className="text-2xl text-valorant-red" />
-                            </div>
-                            <div>
-                                <h4 className="text-xl font-semibold mb-2">Global Rankings</h4>
-                                <p className="text-gray-400 leading-relaxed">Compare yourself with players worldwide and track your progress</p>
-                            </div>
-                        </div>
-
-                        <div className="p-6 bg-white/5 backdrop-blur rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-1 flex items-start gap-6">
-                            <div className="p-4 bg-valorant-red/10 rounded-xl">
-                                <FontAwesomeIcon icon={faChartPie} className="text-2xl text-valorant-red" />
-                            </div>
-                            <div>
-                                <h4 className="text-xl font-semibold mb-2">Detailed Analysis</h4>
-                                <p className="text-gray-400 leading-relaxed">Get insights into your gameplay with comprehensive statistics</p>
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </div>
             </section>
@@ -276,92 +275,70 @@ export default function Home() {
                 <div className="relative z-10 flex flex-col items-center justify-center h-full p-16 text-center">
                     <div className="max-w-3xl">
                         <h2 className="text-4xl font-bold mb-6 text-lol-gold">
-                            Join our League of Legends Community
+                            {t.home.community.title}
                         </h2>
                         <p className="text-xl text-gray-300 mb-10">
-                            Connect with fellow players, share strategies, and stay ahead of the curve 
-                            with our comprehensive tools and insights.
+                            {t.home.community.description}
                         </p>
                     </div>
                     <div className="flex gap-6">
                         <button className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-lg hover:bg-white/20 transition-all duration-300 hover:-translate-y-0.5 border border-lol-gold/30 hover:border-lol-gold/50">
-                            Join Discord
+                            {t.common.joinDiscord}
                         </button>
                         <button className="px-8 py-4 bg-lol-gold text-valorant-dark font-semibold rounded-lg hover:shadow-[0_5px_15px_rgba(200,155,60,0.3)] transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2">
-                            Sign Up <FontAwesomeIcon icon={faChevronRight} className="text-sm" />
+                            {t.common.signUp} <FontAwesomeIcon icon={faChevronRight} className="text-sm" />
                         </button>
                     </div>
                 </div>
             </section>
+
+            <Footer />
         </div>
     );
 }
 
-const features = [
-    {
-        icon: faChartLine,
-        title: "Match Analytics",
-        description: "Track your performance with detailed match history and statistics"
-    },
-    {
-        icon: faTrophy,
-        title: "Competitive Rankings",
-        description: "Compare yourself with top players and track your rank progression"
-    },
-    {
-        icon: faChartPie,
-        title: "Game Stats",
-        description: "Champions and Agents statistics with win rates and trends"
-    },
-    {
-        icon: faUsers,
-        title: "Pro Scene",
-        description: "Follow professional matches and player performances"
-    }
-];
-
 const stats = [
     {
         icon: faSquarePollVertical,
-        title: "Performance Tracking",
-        description: "Real-time match analysis and detailed performance metrics for both games"
+        translationKey: 'performanceTracking' as const,
+        descriptionKey: 'performanceTrackingDesc' as const,
     },
     {
         icon: faTrophy,
-        title: "Rank Progress",
-        description: "Track your competitive journey from Iron to Radiant or Challenger",
+        translationKey: 'rankProgress' as const,
+        descriptionKey: 'rankProgressDesc' as const,
         featured: true
     },
     {
         icon: faChartPie,
-        title: "Gameplay Analysis",
-        description: "Deep insights into your Champion and Agent performance"
+        translationKey: 'gameplayAnalysis' as const,
+        descriptionKey: 'gameplayAnalysisDesc' as const,
     }
 ];
 
 const metrics = [
-    { icon: faTrophy, value: "10M+", label: "Players Tracked" },
-    { icon: faChartPie, value: "50M+", label: "Matches Analyzed" },
-    { icon: faUsers, value: "100K+", label: "Daily Users" },
-    { icon: faChartLine, value: "1B+", label: "Stats Recorded" },
-    { icon: faSquarePollVertical, value: "2M+", label: "Profiles Created" },
-    { icon: faCube, value: "24/7", label: "Live Tracking" }
+    { icon: faTrophy, translationKey: 'playersTracked' as const, value: "10M+" },
+    { icon: faChartPie, translationKey: 'matchesAnalyzed' as const, value: "50M+" },
+    { icon: faUsers, translationKey: 'dailyUsers' as const, value: "5K+" },
+    { icon: faChartLine, translationKey: 'statsRecorded' as const, value: "1B+" },
+    { icon: faSquarePollVertical, translationKey: 'profilesCreated' as const, value: "2K+" },
+    { icon: faCube, translationKey: 'liveTracking' as const, value: "24/7" }
 ];
 
 const features2 = [
     {
         icon: faChartLine,
-        title: "Real-time Stats",
-        description: "Track your performance as you play with instant updates and detailed analytics"
+        translationKey: 'realTimeStats' as const,
+        descriptionKey: 'realTimeStatsDesc' as const,
     },
     {
         icon: faSquarePollVertical,
-        title: "Global Rankings",
-        description: "Compare yourself with players worldwide and track your progress"
+        translationKey: 'globalRankings' as const,
+        descriptionKey: 'globalRankingsDesc' as const,
     },
     {
         icon: faChartPie,
-        title: "Detailed Analysis",
-        description: "Get insights into your gameplay with comprehensive statistics"
+        translationKey: 'detailedAnalysis' as const,
+        descriptionKey: 'detailedAnalysisDesc' as const,
     }
 ];

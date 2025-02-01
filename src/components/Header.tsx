@@ -4,8 +4,37 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faCog } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { faDiscord } from '@fortawesome/free-brands-svg-icons';
+
+const games = [
+    {
+        name: 'Valorant',
+        logo: '/images/games/valorant/Logomark/V_Logomark_Red.png',
+        menuItems: [
+            { name: 'Leaderboard', path: '/valorant/leaderboard' },
+            { name: 'Search Player', path: '/valorant/search-player' },
+            { name: 'Stats', path: '/valorant/stats' },
+            { name: 'Agents', path: '/valorant/agents' },
+            { name: 'Weapons', path: '/valorant/weapons' }
+        ],
+        activeColor: 'text-valorant-red',
+        activeBg: 'bg-valorant-red/10'
+    },
+    {
+        name: 'League of Legends',
+        logo: '/images/games/lol/logo.png',
+        menuItems: [
+            { name: 'Leaderboard', path: '/lol/leaderboard' },
+            { name: 'Search Player', path: '/lol/search-player' },
+            { name: 'Stats', path: '/lol/stats' },
+            { name: 'Champions', path: '/lol/champions' },
+            { name: 'Items', path: '/lol/items' }
+        ],
+        activeColor: 'text-lol-gold',
+        activeBg: 'bg-lol-gold/10'
+    }
+];
 
 const Header = () => {
     const pathname = usePathname();
@@ -26,65 +55,36 @@ const Header = () => {
 
                 {/* Center Navigation */}
                 <div className="flex items-center gap-12">
-                    {/* Valorant */}
-                    <div className="relative p-2 group">
-                        <Image 
-                            src="/images/games/valorant/Logomark/V_Logomark_Red.png" 
-                            alt="Valorant" 
-                            width={70} 
-                            height={70}
-                            className="w-auto cursor-pointer transition-transform hover:scale-105"
-                        />
-                        <div className="absolute top-full left-0 min-w-[200px] bg-black/95 backdrop-blur-md border border-white/10 rounded-lg p-4 flex flex-col gap-3 opacity-0 invisible translate-y-[-10px] transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0">
-                            <Link 
-                                href="/valorant/leaderboard"
-                                className={`px-2 py-2 rounded-md transition-all ${isActive('/valorant/leaderboard') ? 'text-valorant-red bg-valorant-red/10' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
-                            >
-                                Leaderboard
-                            </Link>
-                            <Link 
-                                href="/valorant/stats"
-                                className={`px-2 py-2 rounded-md transition-all ${isActive('/valorant/stats') ? 'text-valorant-red bg-valorant-red/10' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
-                            >
-                                Stats
-                            </Link>
+                    {games.map((game, index) => (
+                        <div key={index} className="relative p-2 group">
+                            <Image 
+                                src={game.logo}
+                                alt={game.name}
+                                width={70}
+                                height={70}
+                                className="w-auto cursor-pointer transition-transform hover:scale-105"
+                            />
+                            <div className="absolute top-full left-0 min-w-[200px] bg-black/95 backdrop-blur-md border border-white/10 rounded-lg p-4 flex flex-col gap-3 opacity-0 invisible translate-y-[-10px] transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0">
+                                {game.menuItems.map((item, itemIndex) => (
+                                    <Link 
+                                        key={itemIndex}
+                                        href={item.path}
+                                        className={`px-2 py-2 rounded-md transition-all ${
+                                            isActive(item.path) 
+                                                ? `${game.activeColor} ${game.activeBg}` 
+                                                : 'text-white/80 hover:bg-white/10 hover:text-white'
+                                        }`}
+                                    >
+                                        {item.name}
+                                    </Link>
+                                ))}
+                            </div>
                         </div>
-                    </div>
-
-                    {/* League of Legends */}
-                    <div className="relative p-2 group">
-                        <Image 
-                            src="/images/games/lol/logo.png" 
-                            alt="League of Legends" 
-                            width={70} 
-                            height={70}
-                            className="w-auto cursor-pointer transition-transform hover:scale-105"
-                        />
-                        <div className="absolute top-full left-0 min-w-[200px] bg-black/95 backdrop-blur-md border border-white/10 rounded-lg p-4 flex flex-col gap-3 opacity-0 invisible translate-y-[-10px] transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0">
-                            <Link 
-                                href="/lol/leaderboard"
-                                className={`px-2 py-2 rounded-md transition-all ${isActive('/lol/leaderboard') ? 'text-lol-gold bg-lol-gold/10' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
-                            >
-                                Leaderboard
-                            </Link>
-                            <Link 
-                                href="/lol/stats"
-                                className={`px-2 py-2 rounded-md transition-all ${isActive('/lol/stats') ? 'text-lol-gold bg-lol-gold/10' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
-                            >
-                                Stats
-                            </Link>
-                        </div>
-                    </div>
+                    ))}
                 </div>
 
                 {/* Right Section */}
                 <div className="flex items-center gap-4">
-                    {/* <Link 
-                        href="/esports"
-                        className="h-[38px] px-5 flex items-center gap-2 rounded-md font-semibold text-sm text-white border border-white/20 transition-all hover:border-white/40 hover:bg-white/5"
-                    >
-                        Esports
-                    </Link> */}
                     <button className="h-[38px] px-5 flex items-center gap-2 rounded-md font-semibold text-sm text-white bg-[#5865F2] transition-all hover:bg-[#4752c4]">
                         <FontAwesomeIcon icon={faDiscord} />
                         Discord
@@ -94,11 +94,6 @@ const Header = () => {
                     </button>
                 </div>
             </nav>
-
-            {/* Settings Button */}
-            {/* <button className="fixed bottom-8 right-8 w-[45px] h-[45px] flex items-center justify-center rounded-full bg-black/80 backdrop-blur-md border border-white/20 text-white text-xl transition-all hover:border-white/40 hover:bg-black/90">
-                <FontAwesomeIcon icon={faCog} />
-            </button> */}
         </header>
     );
 };
