@@ -60,12 +60,24 @@ export const fr = {
         },
     },
     valorant: {
+        searchPlayerPage: {
+            title: 'Rechercher un joueur',
+            description: 'Suivez les statistiques détaillées, l\'historique des matchs et les classements de n\'importe quel joueur Valorant.',
+            placeholder: 'Rechercher un joueur...',
+            examples: 'Exemples: ',
+        },
         agents: 'Agents',
         weapons: 'Armes',
         searchPlaceholder: 'Rechercher un joueur...',
         trackStats: 'Suivez les statistiques détaillées, l\'historique des matchs et les classements de n\'importe quel joueur Valorant.',
     },
     lol: {
+        searchPlayerPage: {
+            title: 'Rechercher un joueur',
+            description: 'Suivez les statistiques détaillées, l\'historique des matchs et les classements de n\'importe quel joueur League of Legends.',
+            placeholder: 'Rechercher un invocateur...',
+            examples: 'Exemples: ',
+        },
         champions: 'Champions',
         items: 'Objets',
         searchPlaceholder: 'Rechercher un invocateur...',

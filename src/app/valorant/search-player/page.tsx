@@ -3,8 +3,10 @@
 import { useState } from 'react';
 import { SiRiotgames } from 'react-icons/si';
 import { BiSearch } from 'react-icons/bi';
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function SearchPlayer() {
+    const { t } = useLanguage();
     const [searchQuery, setSearchQuery] = useState('');
 
     const handleSearch = (e: React.FormEvent) => {
@@ -45,13 +47,12 @@ export default function SearchPlayer() {
                 {/* Header */}
                 <div className="mb-16 relative py-8">
                     <h1 className="text-[3.5rem] mb-6 bg-gradient-to-r from-[#FF4654] to-[#FF7F8C] bg-clip-text text-transparent font-extrabold tracking-[-1px] uppercase relative">
-                        Search a player
+                        {t.valorant.searchPlayerPage.title}
                         <div className="absolute -top-3 -right-3 w-6 h-6 border-t-2 border-r-2 border-[#FF4654]/30" />
                         <div className="absolute -bottom-3 -left-3 w-6 h-6 border-b-2 border-l-2 border-[#FF4654]/30" />
                     </h1>
                     <p className="text-xl text-white/80 max-w-[600px] mx-auto leading-relaxed">
-                        Track detailed statistics, match history and rankings for any<br />
-                        Valorant player.
+                        {t.valorant.searchPlayerPage.description}
                     </p>
                 </div>
 
@@ -63,7 +64,7 @@ export default function SearchPlayer() {
                             type="text"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="Search player..."
+                            placeholder={t.valorant.searchPlayerPage.placeholder}
                             className="flex-1 px-6 py-4 bg-transparent text-white text-lg font-medium placeholder:text-white/40 focus:outline-none"
                         />
                         <button 
@@ -74,21 +75,6 @@ export default function SearchPlayer() {
                         </button>
                     </div>
                 </form>
-
-                {/* Examples */}
-                <div className="flex items-center justify-center gap-4 text-white/60">
-                    <p className="text-[0.95rem]">Examples: </p>
-                    <div className="flex gap-3">
-                        {['TenZ', 'ScreaM', 'yay'].map((player, index) => (
-                            <span 
-                                key={index}
-                                className="px-5 py-2 bg-[#0F1923]/60 border border-[#FF4654]/30 rounded-full text-sm cursor-pointer transition-all duration-200 font-medium hover:bg-[#FF4654]/10 hover:border-[#FF4654]/60 hover:text-[#FF4654] hover:-translate-y-0.5"
-                            >
-                                {player}
-                            </span>
-                        ))}
-                    </div>
-                </div>
             </div>
         </div>
     );

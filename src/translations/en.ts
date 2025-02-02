@@ -60,12 +60,24 @@ export const en = {
         },
     },
     valorant: {
+        searchPlayerPage: {
+            title: 'Search a player',
+            description: 'Track detailed statistics, match history and rankings for any Valorant player.',
+            placeholder: 'Search player...',
+            examples: 'Examples: ',
+        },
         agents: 'Agents',
         weapons: 'Weapons',
         searchPlaceholder: 'Search player...',
         trackStats: 'Track detailed statistics, match history and rankings for any Valorant player.',
     },
     lol: {
+        searchPlayerPage: {
+            title: 'Search a player',
+            description: 'Track detailed statistics, match history and rankings for any League of Legends player.',
+            placeholder: 'Search summoner...',
+            examples: 'Examples: ',
+        },
         champions: 'Champions',
         items: 'Items',
         searchPlaceholder: 'Search summoner...',

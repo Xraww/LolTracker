@@ -12,9 +12,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Footer from "@/components/Footer";
 import { useLanguage } from "@/context/LanguageContext";
-import { en } from "@/translations/en";
-
-type FeatureTranslationKey = keyof typeof en.home.features;
 
 const features = [
     {

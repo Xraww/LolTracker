@@ -21,17 +21,19 @@ const translations = {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider = ({ children }: { children: React.ReactNode }) => {
-    // Initialiser avec la langue du navigateur ou fr par défaut
+    // Initialiser avec la langue du navigateur ou en par défaut
     const [language, setLanguage] = useState<Language>(() => {
         if (typeof window !== 'undefined') {
             const savedLang = localStorage.getItem('language') as Language;
+
             if (savedLang && (savedLang === 'en' || savedLang === 'fr')) {
                 return savedLang;
             }
+            
             const browserLang = navigator.language.split('-')[0];
-            return browserLang === 'fr' ? 'fr' : 'en';
+            return browserLang === 'en' ? 'en' : 'fr';
         }
-        return 'fr';
+        return 'en';
     });
 
     // Sauvegarder la langue dans le localStorage

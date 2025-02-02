@@ -11,23 +11,27 @@ const config: Config = {
             colors: {
                 background: "var(--background)",
                 foreground: "var(--foreground)",
-                valorant: {
-                    red: "#FF4654",
-                    dark: "#111111",
-                },
+                'valorant-red': '#FF4654',
+                'valorant-dark': '#0F1923',
+                'lol-gold': '#C89B3C',
                 lol: {
-                    gold: "#C89B3C",
                     blue: "#0BC4E2",
                 },
             },
             animation: {
-                float: 'float 4s ease-in-out infinite',
+                'slow-spin': 'spin 20s linear infinite',
+                'float': 'float 6s ease-in-out infinite',
+                'float-delayed': 'float 6s ease-in-out infinite 2s',
             },
             keyframes: {
                 float: {
-                '0%, 100%': { transform: 'translateY(0)' },
-                '50%': { transform: 'translateY(-10px)' },
-                },
+                    '0%, 100%': {
+                        transform: 'translateY(0)'
+                    },
+                    '50%': {
+                        transform: 'translateY(-20px)'
+                    }
+                }
             },
             backgroundImage: {
                 'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
