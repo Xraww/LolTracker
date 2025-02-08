@@ -7,11 +7,12 @@ import { fr } from '@/translations/fr';
 type Language = 'en' | 'fr';
 type Translations = typeof en;
 
-interface LanguageContextType {
+type LanguageContextType = {
     language: Language;
     setLanguage: (lang: Language) => void;
     t: Translations;
 }
+
 
 const translations = {
     en,

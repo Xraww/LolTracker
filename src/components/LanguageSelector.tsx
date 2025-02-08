@@ -57,7 +57,7 @@ const LanguageSelector = () => {
                             {language === lang.code && (
                                 <FontAwesomeIcon 
                                     icon={faCheck} 
-                                    className="text-valorant-red text-sm"
+                                    className="text-lol-gold text-sm"
                                 />
                             )}
                         </button>

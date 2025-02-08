@@ -5,15 +5,14 @@ export const en = {
         stats: 'Stats',
         searchPlayer: 'Search Player',
         explore: 'Explore',
-        startTracking: 'Start Tracking',
         viewLeaderboards: 'View Leaderboards',
         joinDiscord: 'Join Discord',
         signUp: 'Sign Up',
     },
     home: {
         hero: {
-            title: 'Track Your Progress Across Games',
-            subtitle: 'Master your performance in both League of Legends and Valorant',
+            title: 'Track Your Progress in League of Legends',
+            subtitle: 'Master your performance in League of Legends',
         },
         features: {
             matchAnalytics: 'Match Analytics',
@@ -21,20 +20,20 @@ export const en = {
             rankings: 'Competitive Rankings',
             rankingsDesc: 'Compare yourself with top players and track your rank progression',
             gameStats: 'Game Stats',
-            gameStatsDesc: 'Champions and Agents statistics with win rates and trends',
+            gameStatsDesc: 'Champion statistics with win rates and trends',
             proScene: 'Pro Scene',
             proSceneDesc: 'Follow professional matches and player performances',
         },
         stats: {
             title: 'Statistics',
             subtitle: 'In-Depth Gaming Analytics',
-            description: 'Access comprehensive statistics for both League of Legends and Valorant to enhance your competitive gameplay',
+            description: 'Access comprehensive statistics for League of Legends to enhance your competitive gameplay',
             performanceTracking: 'Performance Tracking',
-            performanceTrackingDesc: 'Real-time match analysis and detailed performance metrics for both games',
+            performanceTrackingDesc: 'Real-time match analysis and detailed performance metrics',
             rankProgress: 'Rank Progress',
-            rankProgressDesc: 'Track your competitive journey from Iron to Radiant or Challenger',
+            rankProgressDesc: 'Track your competitive journey from Iron to Challenger',
             gameplayAnalysis: 'Gameplay Analysis',
-            gameplayAnalysisDesc: 'Deep insights into your Champion and Agent performance',
+            gameplayAnalysisDesc: 'Deep insights into your Champion performance',
             popular: 'Popular',
         },
         metrics: {
@@ -59,18 +58,6 @@ export const en = {
             description: 'Connect with fellow players, share strategies, and stay ahead of the curve with our comprehensive tools and insights',
         },
     },
-    valorant: {
-        searchPlayerPage: {
-            title: 'Search a player',
-            description: 'Track detailed statistics, match history and rankings for any Valorant player.',
-            placeholder: 'Search player...',
-            examples: 'Examples: ',
-        },
-        agents: 'Agents',
-        weapons: 'Weapons',
-        searchPlaceholder: 'Search player...',
-        trackStats: 'Track detailed statistics, match history and rankings for any Valorant player.',
-    },
     lol: {
         searchPlayerPage: {
             title: 'Search a player',
@@ -86,7 +73,7 @@ export const en = {
     footer: {
         about: {
             title: 'About Us',
-            description: 'Providing the best gaming statistics and analysis for League of Legends and Valorant players.',
+            description: 'Providing the best gaming statistics and analysis for League of Legends players.',
         },
         leagueOfLegends: {
             title: 'League of Legends',
@@ -95,12 +82,12 @@ export const en = {
             proMatches: 'Pro Matches',
             championsStats: 'Champions Stats',
         },
-        valorant: {
-            title: 'Valorant',
-            searchPlayer: 'Search Player',
-            leaderboard: 'Leaderboard',
-            proMatches: 'Pro Matches',
-            agentsStats: 'Agents Stats',
+        community: {
+            title: 'Community',
+            discord: 'Join Discord',
+            twitter: 'Twitter',
+            github: 'GitHub',
+            reddit: 'Reddit',
         },
         resources: {
             title: 'Resources',

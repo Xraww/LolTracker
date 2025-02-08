@@ -1,30 +1,22 @@
 // Configuration des points d'accès API
 export const API_ENDPOINTS = {
-    // Valorant API endpoints
-    valorant: {
-        base: 'https://api.henrikdev.xyz/valorant/v1',
-        mmr: '/mmr',
-        matches: '/matches',
-    },
-    
     // League of Legends API endpoints
-    leagueOfLegends: {
+    lol: {
         base: 'https://euw1.api.riotgames.com/lol',
         summoner: '/summoner/v4/summoners/by-name',
-        league: '/league/v4/entries/by-summoner',
-        matches: '/match/v5/matches/by-puuid',
-    }
+        matchHistory: '/match/v5/matches/by-puuid',
+        matchDetails: '/match/v5/matches',
+        leaderboard: '/league/v4/challengerleagues/by-queue/RANKED_SOLO_5x5',
+    },
 };
 
 // Configuration des régions
 export const REGIONS = {
-    valorant: ['eu', 'na', 'ap', 'kr'],
-    leagueOfLegends: ['euw1', 'eun1', 'na1', 'kr', 'jp1']
+    lol: ['euw1', 'na1', 'kr', 'br1', 'eun1', 'jp1', 'la1', 'la2', 'oc1', 'tr1', 'ru'],
 } as const;
 
 // Types pour les régions
-export type ValorantRegion = typeof REGIONS.valorant[number];
-export type LeagueRegion = typeof REGIONS.leagueOfLegends[number];
+export type LolRegion = typeof REGIONS.lol[number];
 
 // Configuration des timeouts et limites
 export const API_CONFIG = {

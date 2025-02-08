@@ -8,9 +8,9 @@ import { LanguageProvider } from "@/context/LanguageContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "GG Tracker - Valorant & League of Legends Stats",
-    description: "Track your Valorant and League of Legends stats in real-time",
-    keywords: "Valorant, League of Legends, Stats Tracker, LoL, Valo",
+    title: "GG Tracker - League of Legends Stats",
+    description: "Track your League of Legends stats in real-time",
+    keywords: "League of Legends, Stats Tracker, LoL, Summoner Stats, Champion Stats",
 };
 
 export default function RootLayout({

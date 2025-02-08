@@ -11,12 +11,8 @@ const config: Config = {
             colors: {
                 background: "var(--background)",
                 foreground: "var(--foreground)",
-                'valorant-red': '#FF4654',
-                'valorant-dark': '#0F1923',
                 'lol-gold': '#C89B3C',
-                lol: {
-                    blue: "#0BC4E2",
-                },
+                'lol-dark': '#0D0D0D',
             },
             animation: {
                 'slow-spin': 'spin 20s linear infinite',
