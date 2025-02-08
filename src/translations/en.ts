@@ -60,10 +60,15 @@ export const en = {
     },
     lol: {
         searchPlayerPage: {
-            title: 'Search a player',
-            description: 'Track detailed statistics, match history and rankings for any League of Legends player.',
-            placeholder: 'Search summoner...',
-            examples: 'Examples: ',
+            title: "Player Search",
+            description: "Enter a Riot ID to search for a player's profile and stats",
+            placeholder: "Enter Riot ID (e.g., Player#TAG)",
+            errors: {
+                emptySearch: "Please enter a Riot ID",
+                invalidFormat: "Invalid format. Please use format: Name#Tag",
+                generic: "An error occurred while fetching player data",
+                notFound: "Player not found"
+            }
         },
         champions: 'Champions',
         items: 'Items',
@@ -102,4 +107,4 @@ export const en = {
             termsOfService: 'Terms of Service',
         },
     },
-}; 
+} as const; 

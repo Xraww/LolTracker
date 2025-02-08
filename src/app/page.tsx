@@ -49,7 +49,7 @@ export default function Home() {
 
                 <div className="relative z-10 flex flex-col items-center gap-8 md:gap-12 text-center w-full max-w-[700px] mx-auto px-4">
                     <img 
-                        src="/images/games/lol/logo.png" 
+                        src="/images/game/lol/logo.png" 
                         alt="League of Legends" 
                         className="w-[200px] md:w-[280px] lg:w-[320px] object-contain transition-transform duration-300 hover:scale-105 drop-shadow-[0_0_30px_rgba(200,155,60,0.2)]"
                     />

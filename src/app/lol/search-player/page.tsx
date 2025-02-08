@@ -1,17 +1,69 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SiRiotgames } from 'react-icons/si';
 import { BiSearch } from 'react-icons/bi';
+import { HiOutlineArrowRight } from 'react-icons/hi';
 import { useLanguage } from "@/context/LanguageContext";
+import { CompleteSummonerInfo } from '@/types/riot-api';
+import { getCurrentLoLVersion, getProfileIconUrl } from '@/lib/api-utils';
+import { useRouter } from 'next/navigation';
 
 export default function SearchPlayer() {
+    const router = useRouter();
     const { t } = useLanguage();
     const [searchQuery, setSearchQuery] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [summonerData, setSummonerData] = useState<CompleteSummonerInfo | null>(null);
+    const [currentVersion, setCurrentVersion] = useState<string>('13.24.1');
 
-    const handleSearch = (e: React.FormEvent) => {
+    useEffect(() => {
+        // Fetch current LoL version when component mounts
+        getCurrentLoLVersion().then(version => {
+            setCurrentVersion(version);
+        });
+    }, []);
+
+    const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault();
-        // La logique de recherche sera implémentée plus tard
+        setError(null);
+        setSummonerData(null);
+
+        // Validate search query
+        if (!searchQuery.trim()) {
+            setError(t.lol.searchPlayerPage.errors.emptySearch);
+            return;
+        }
+
+        // Parse Riot ID (format: gameName#tagLine)
+        const [gameName, tagLine] = searchQuery.split('#');
+        if (!tagLine) {
+            setError(t.lol.searchPlayerPage.errors.invalidFormat);
+            return;
+        }
+
+        setIsLoading(true);
+        try {
+            const response = await fetch(`/api/lol/summoner?name=${encodeURIComponent(gameName)}&tag=${encodeURIComponent(tagLine)}`);
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || t.lol.searchPlayerPage.errors.generic);
+            }
+
+            setSummonerData(data);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : t.lol.searchPlayerPage.errors.generic);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const navigateToProfile = () => {
+        if (summonerData) {
+            router.push(`/lol/profile/${summonerData.account.gameName}-${summonerData.account.tagLine}`);
+        }
     };
 
     return (
@@ -21,7 +73,7 @@ export default function SearchPlayer() {
                 {/* Runic circle - inspired by LoL's magical elements */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] md:w-[800px] md:h-[800px]">
                     {/* Outer circle */}
-                    <div className="absolute inset-0 border-2 border-[#C89B3C]/20 rounded-full animate-slow-spin" />
+                    {/* <div className="absolute inset-0 border-2 border-[#C89B3C]/20 rounded-full animate-slow-spin" /> */}
                     {/* Inner circle */}
                     <div className="absolute inset-[60px] sm:inset-[90px] md:inset-[120px] border border-[#785A28]/10 rounded-full animate-slow-spin" />
                 </div>
@@ -63,7 +115,7 @@ export default function SearchPlayer() {
 
                 {/* Search Form */}
                 <form onSubmit={handleSearch} className="mb-6 sm:mb-8 md:mb-10">
-                    <div className="flex max-w-[600px] mx-auto bg-[#091428]/90 border border-[#C89B3C]/30 rounded-full p-1 sm:p-2 shadow-lg shadow-black/20 items-center transition-all duration-300 hover:border-[#C89B3C]/60 hover:shadow-[#C89B3C]/10 hover:-translate-y-0.5">
+                    <div className="flex max-w-[600px] mx-auto bg-gradient-to-br from-black to-lol-dark text-white border border-[#C89B3C]/30 rounded-full p-1 sm:p-2 shadow-lg shadow-black/20 items-center transition-all duration-300 hover:border-[#C89B3C]/60 hover:shadow-[#C89B3C]/10 hover:-translate-y-0.5">
                         <SiRiotgames className="text-[#C89B3C] text-xl sm:text-2xl ml-3 sm:ml-6 opacity-80" />
                         <input 
                             type="text"
@@ -71,15 +123,95 @@ export default function SearchPlayer() {
                             onChange={(e) => setSearchQuery(e.target.value)}
                             placeholder={t.lol.searchPlayerPage.placeholder}
                             className="flex-1 px-3 sm:px-6 py-3 sm:py-4 bg-transparent text-[#F0E6D2] text-base sm:text-lg font-medium placeholder:text-[#C8AA6E]/40 focus:outline-none"
+                            disabled={isLoading}
                         />
                         <button 
                             type="submit"
-                            className="bg-[#C89B3C] px-4 sm:px-8 py-3 sm:py-4 rounded-full transition-all duration-300 hover:bg-[#D5B168] hover:-translate-y-0.5 mr-0.5 sm:mr-1 text-[#091428]"
+                            className={`bg-[#C89B3C] px-4 sm:px-8 py-3 sm:py-4 rounded-full transition-all duration-300 hover:bg-[#C8AA6E] hover:-translate-y-0.5 mr-0.5 sm:mr-1 text-[#1E2328] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#C89B3C] disabled:hover:translate-y-0`}
+                            disabled={isLoading}
                         >
                             <BiSearch className="text-xl sm:text-2xl" />
                         </button>
                     </div>
                 </form>
+
+                {/* Error Message */}
+                {error && (
+                    <div className="text-[#FF4655] bg-[#FF4655]/10 border border-[#FF4655]/20 rounded-lg p-4 mb-6 max-w-[600px] mx-auto">
+                        {error}
+                    </div>
+                )}
+
+                {/* Loading State */}
+                {isLoading && (
+                    <div className="flex items-center justify-center space-x-2 text-[#C89B3C]">
+                        <div className="w-4 h-4 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                        <div className="w-4 h-4 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                        <div className="w-4 h-4 rounded-full animate-bounce" />
+                    </div>
+                )}
+
+                {/* Summoner Data */}
+                {summonerData && (
+                    <div 
+                        onClick={navigateToProfile}
+                        className="group bg-gradient-to-br from-black to-lol-dark text-white border border-[#C89B3C]/30 rounded-lg p-6 max-w-[600px] mx-auto transition-all duration-300 hover:bg-[#1E2328]/95 hover:border-[#C89B3C] hover:shadow-lg hover:shadow-[#C89B3C]/10 hover:-translate-y-0.5 cursor-pointer relative"
+                    >
+
+                        <div className="flex items-center space-x-4 mb-4">
+                            <img 
+                                src={getProfileIconUrl(summonerData.summoner.profileIconId, currentVersion)}
+                                alt="Profile Icon"
+                                className="w-16 h-16 rounded-full border-2 border-[#C89B3C] group-hover:border-[#C8AA6E] transition-colors duration-300"
+                            />
+                            <div className="text-left">
+                                <h2 className="text-xl font-bold text-[#C89B3C] group-hover:text-[#C8AA6E] transition-colors duration-300">
+                                    {summonerData.account.gameName}
+                                    <span className="text-sm text-[#C8AA6E] ml-2 opacity-80">#{summonerData.account.tagLine}</span>
+                                </h2>
+                                <p className="text-[#C8AA6E]/60 group-hover:text-[#C8AA6E]/80 transition-colors duration-300">
+                                    Level {summonerData.summoner.summonerLevel}
+                                </p>
+                            </div>
+                        </div>
+
+                        {summonerData.ranked && summonerData.ranked.length > 0 && (
+                            <div className="border-t border-[#C89B3C]/20 pt-4 mt-4">
+                                <h3 className="text-lg font-semibold text-[#C8AA6E] mb-2">Ranked Solo/Duo</h3>
+                                {summonerData.ranked.map((rank, index) => (
+                                    rank.queueType === 'RANKED_SOLO_5x5' && (
+                                        <div key={index} className="flex items-center justify-between">
+                                            <div className="flex items-center gap-2">
+                                                <img 
+                                                    src={`/images/game/lol/rank/${rank.tier.toLowerCase()}.png`}
+                                                    alt={`${rank.tier} Rank`}
+                                                    className="w-8 h-8 object-contain"
+                                                />
+                                                <div>
+                                                    <span className="text-[#C89B3C] font-bold group-hover:text-[#C8AA6E] transition-colors duration-300">
+                                                        {rank.tier === 'CHALLENGER' || rank.tier === 'GRANDMASTER' || rank.tier === 'MASTER' 
+                                                            ? rank.tier 
+                                                            : `${rank.tier} ${rank.rank}`
+                                                        }
+                                                    </span>
+                                                    <span className="text-[#C8AA6E]/60 ml-2 group-hover:text-[#C8AA6E]/80 transition-colors duration-300">
+                                                        - {rank.leaguePoints} LP
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="text-[#C8AA6E]/60 group-hover:text-[#C8AA6E]/80 transition-colors duration-300">
+                                                {rank.wins}W - {rank.losses}L
+                                                <span className="ml-2">
+                                                    ({Math.round((rank.wins / (rank.wins + rank.losses)) * 100)}%)
+                                                </span>
+                                            </div>
+                                        </div>
+                                    )
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );

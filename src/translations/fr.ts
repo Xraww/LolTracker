@@ -60,10 +60,15 @@ export const fr = {
     },
     lol: {
         searchPlayerPage: {
-            title: 'Rechercher un joueur',
-            description: 'Suivez les statistiques détaillées, l\'historique des matchs et les classements de n\'importe quel joueur League of Legends.',
-            placeholder: 'Rechercher un invocateur...',
-            examples: 'Exemples : ',
+            title: "Recherche de Joueur",
+            description: "Entrez un Riot ID pour rechercher le profil et les statistiques d'un joueur",
+            placeholder: "Entrez un Riot ID (ex: Joueur#TAG)",
+            errors: {
+                emptySearch: "Veuillez entrer un Riot ID",
+                invalidFormat: "Format invalide. Utilisez le format: Nom#Tag",
+                generic: "Une erreur est survenue lors de la recherche",
+                notFound: "Joueur non trouvé"
+            }
         },
         champions: 'Champions',
         items: 'Objets',
@@ -102,4 +107,4 @@ export const fr = {
             termsOfService: 'Conditions d\'utilisation',
         },
     },
-}; 
+} as const; 
