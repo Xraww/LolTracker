@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { SiRiotgames } from 'react-icons/si';
 import { BiSearch } from 'react-icons/bi';
-import { HiOutlineArrowRight } from 'react-icons/hi';
 import { useLanguage } from "@/context/LanguageContext";
 import { CompleteSummonerInfo } from '@/types/riot-api';
 import { getCurrentLoLVersion, getProfileIconUrl } from '@/lib/api-utils';
@@ -62,7 +61,7 @@ export default function SearchPlayer() {
 
     const navigateToProfile = () => {
         if (summonerData) {
-            router.push(`/lol/profile/${summonerData.account.gameName}-${summonerData.account.tagLine}`);
+            router.push(`/lol/profile/${encodeURIComponent(summonerData.account.gameName)}-${encodeURIComponent(summonerData.account.tagLine)}`);
         }
     };
 
