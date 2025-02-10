@@ -27,7 +27,9 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
     const [hasMore, setHasMore] = useState(true);
     const MATCHES_PER_PAGE = 15;
     const [expandedMatches, setExpandedMatches] = useState<Set<string>>(new Set());
-    const [playerRanks, setPlayerRanks] = useState<{ [key: string]: LeagueEntryDTO[] }>({});
+    const [playerRanks, setPlayerRanks] = useState<{ [key: string]: { data: LeagueEntryDTO[], timestamp: number } }>({});
+    const RANK_CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
+    const [itemNames, setItemNames] = useState<{ [key: string]: string }>({});
 
     useEffect(() => {
         const fetchSummonerData = async () => {
@@ -92,6 +94,23 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
         }
     }, [summonerData, currentPage]);
 
+    useEffect(() => {
+        const fetchItemData = async () => {
+            try {
+                const response = await fetch(`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/data/en_US/item.json`);
+                const data = await response.json();
+                setItemNames(Object.entries(data.data).reduce((acc: { [key: string]: string }, [id, item]: [string, any]) => {
+                    acc[id] = item.name;
+                    return acc;
+                }, {}));
+            } catch (error) {
+                console.error('Error fetching item data:', error);
+            }
+        };
+
+        fetchItemData();
+    }, [currentVersion]);
+
     const getParticipantFromMatch = (match: MatchData) => {
         return match.info.participants.find(
             p => p.puuid === summonerData?.summoner.puuid
@@ -118,14 +137,6 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
         }
         
         return 'just now';
-    };
-
-    const formatMatchDate = (timestamp: number) => {
-        return new Date(timestamp).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-        });
     };
 
     const getSummonerSpellById = (spellId: number): string => {
@@ -190,41 +201,64 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
     };
 
     const fetchPlayerRanks = async (players: { riotIdGameName: string, riotIdTagline: string }[]) => {
+        const now = Date.now();
         const uniquePlayers = players.filter((player, index, self) =>
             index === self.findIndex((p) => p.riotIdGameName === player.riotIdGameName && p.riotIdTagline === player.riotIdTagline)
         );
 
-        const promises = uniquePlayers.map(async (player) => {
-            try {
-                const response = await fetch(`/api/lol/summoner?name=${encodeURIComponent(player.riotIdGameName)}&tag=${encodeURIComponent(player.riotIdTagline)}`);
-                const data = await response.json();
-                if (response.ok && data.ranked) {
-                    return { 
-                        key: `${player.riotIdGameName}-${player.riotIdTagline}`,
-                        ranked: data.ranked 
-                    };
-                }
-                return null;
-            } catch (error) {
-                console.error('Error fetching player rank:', error);
-                return null;
-            }
+        // Filter out players whose ranks are already cached and not expired
+        const playersToFetch = uniquePlayers.filter(player => {
+            const key = `${player.riotIdGameName}-${player.riotIdTagline}`;
+            const cachedData = playerRanks[key];
+            return !cachedData || (now - cachedData.timestamp) > RANK_CACHE_DURATION;
         });
 
-        const results = await Promise.all(promises);
-        const newRanks = results.reduce((acc, result) => {
-            if (result) {
-                acc[result.key] = result.ranked;
-            }
-            return acc;
-        }, {} as { [key: string]: LeagueEntryDTO[] });
+        if (playersToFetch.length === 0) return;
 
-        setPlayerRanks(prev => ({ ...prev, ...newRanks }));
+        // Batch requests in groups of 5 to avoid rate limits
+        const batchSize = 5;
+        for (let i = 0; i < playersToFetch.length; i += batchSize) {
+            const batch = playersToFetch.slice(i, i + batchSize);
+            const promises = batch.map(async (player) => {
+                try {
+                    const response = await fetch(`/api/lol/summoner?name=${encodeURIComponent(player.riotIdGameName)}&tag=${encodeURIComponent(player.riotIdTagline)}`);
+                    const data = await response.json();
+                    if (response.ok && data.ranked) {
+                        return { 
+                            key: `${player.riotIdGameName}-${player.riotIdTagline}`,
+                            ranked: data.ranked 
+                        };
+                    }
+                    return null;
+                } catch (error) {
+                    console.error('Error fetching player rank:', error);
+                    return null;
+                }
+            });
+
+            const results = await Promise.all(promises);
+            const newRanks = results.reduce((acc, result) => {
+                if (result) {
+                    acc[result.key] = {
+                        data: result.ranked,
+                        timestamp: now
+                    };
+                }
+                return acc;
+            }, {} as { [key: string]: { data: LeagueEntryDTO[], timestamp: number } });
+
+            setPlayerRanks(prev => ({ ...prev, ...newRanks }));
+
+            // Add a small delay between batches to respect rate limits
+            if (i + batchSize < playersToFetch.length) {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+        }
     };
 
     const getRankDisplay = (player: { riotIdGameName: string, riotIdTagline: string }) => {
         const playerKey = `${player.riotIdGameName}-${player.riotIdTagline}`;
-        const rankData = playerRanks[playerKey]?.find(r => r.queueType === 'RANKED_SOLO_5x5');
+        const rankData = playerRanks[playerKey]?.data?.find(r => r.queueType === 'RANKED_SOLO_5x5');
         if (!rankData) return '';
         const highEloRanks = ['CHALLENGER', 'GRANDMASTER', 'MASTER'];
         return `${rankData.tier} ${highEloRanks.includes(rankData.tier) ? '' : rankData.rank} ${rankData.leaguePoints}LP`;
@@ -251,6 +285,27 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
         return new Intl.NumberFormat('en-US').format(num);
     };
 
+    const getItemName = (itemId: number): string => {
+        return itemId > 0 ? (itemNames[itemId] || `Item ${itemId}`) : '';
+    };
+
+    const formatTimeAgo = (timestamp: number): string => {
+        const now = Date.now();
+        const diff = now - timestamp;
+        const minutes = Math.floor(diff / 60000);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+
+        if (days > 0) return `${days}d`;
+        if (hours > 0) return `${hours}h`;
+        if (minutes > 0) return `${minutes}m`;
+        return '1m';
+    };
+
+    const getRankImage = (tier: string): string => {
+        return `/images/game/lol/rank/${tier.toLowerCase()}.png`;
+    };
+
     if (isLoading) {
         return (
             <div className="min-h-screen bg-gradient-to-[135deg] from-[#0A1428] to-[#091428] text-white flex items-center justify-center mt-16">
@@ -265,10 +320,9 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
 
     if (error) {
         return (
-            <div className="min-h-screen bg-gradient-to-[135deg] from-[#0A1428] to-[#091428] text-white flex items-center justify-center p-4 mt-16">
-                <div className="text-[#FF4655] bg-[#FF4655]/10 border border-[#FF4655]/20 rounded-lg p-6 max-w-[600px] text-center">
-                    <h2 className="text-xl font-bold mb-2">Error</h2>
-                    <p>{error}</p>
+            <div className="min-h-screen bg-gradient-to-[135deg] from-[#0A1428] to-[#091428] text-white flex items-center justify-center mt-16">
+                <div className="text-center">
+                    <div className="text-[#C89B3C] text-xl mb-4">{error}</div>
                 </div>
             </div>
         );
@@ -276,17 +330,16 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
 
     if (!summonerData) {
         return (
-            <div className="min-h-screen bg-gradient-to-[135deg] from-[#0A1428] to-[#091428] text-white flex items-center justify-center p-4 mt-16">
-                <div className="text-[#C8AA6E] text-center">
-                    <h2 className="text-xl font-bold mb-2">Summoner Not Found</h2>
-                    <p>The requested summoner profile could not be found.</p>
+            <div className="min-h-screen bg-gradient-to-[135deg] from-[#0A1428] to-[#091428] text-white flex items-center justify-center mt-16">
+                <div className="text-center">
+                    <div className="text-[#C89B3C] text-xl mb-4">{t.lol.searchPlayerPage.errors.notFound}</div>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-[135deg] from-[#0A1428] to-[#091428] text-white mt-16">
+        <div className="min-h-screen bg-gradient-to-[135deg] from-[#0A1428] to-[#091428] text-white pt-16">
             {/* Profile Header */}
             <div className="bg-gradient-to-br from-black to-lol-dark border-b border-[#C89B3C]/30">
                 <div className="container mx-auto px-4 py-8">
@@ -377,7 +430,7 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                     <div className="lg:col-span-2">
                         <div className="bg-gradient-to-br from-[#111111] to-black rounded-lg border border-[#C89B3C]/30 overflow-hidden">
                             <div className="border-b border-[#C89B3C]/30 p-4">
-                                <h2 className="text-xl font-bold text-[#C89B3C]">Match History - Ranked Solo/Duo</h2>
+                                <h2 className="text-xl font-bold text-[#C89B3C]">{t.lol.profile.matchHistory}</h2>
                             </div>
                             <div className="p-4">
                                 <div className="space-y-4">
@@ -395,7 +448,7 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                                         </div>
                                     ) : matches.length === 0 ? (
                                         <div className="bg-black/40 backdrop-blur-sm rounded-lg p-4 text-center border border-[#C89B3C]/20 text-gray-400">
-                                            No matches found
+                                            {t.lol.profile.noMatches}
                                         </div>
                                     ) : (
                                         matches.map((match) => {
@@ -439,7 +492,7 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                                                                 />
                                                             </div>
                                                             {/* Runes */}
-                                                            <div className="flex flex-col justify-between ml-1 my-0.5">
+                                                            <div className="flex flex-col justify-between ml-1 my-0.5 relative">
                                                                 {primaryRune && (
                                                                     <img
                                                                         src={`https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/${getRuneById(primaryRune).path}/${getRuneById(primaryRune).key}/${getRuneById(primaryRune).imageName}.png`}
@@ -460,12 +513,18 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                                                         {/* Match Info */}
                                                         <div className="flex-1">
                                                             <div className="flex items-center justify-between mb-1">
-                                                                <span className={`font-medium ${participant.win ? 'text-[#00FF00]' : 'text-[#FF4655]'}`}>
-                                                                    {participant.win ? 'Victory' : 'Defeat'}
-                                                                </span>
-                                                                <span className="text-gray-400 text-sm">
-                                                                    {formatMatchDate(match.info.gameEndTimestamp)}
-                                                                </span>
+                                                                <div className={`font-medium ${participant.win ? 'text-[#00FF00]' : 'text-[#FF4655]'}`}>
+                                                                    {participant.win ? t.lol.profile.victory : t.lol.profile.defeat}
+                                                                </div>
+                                                                <div className="text-sm text-gray-400">
+                                                                    {match.info.gameEndTimestamp ? (
+                                                                        <>
+                                                                            {formatTimeAgo(match.info.gameEndTimestamp)} {t.lol.profile.ago}
+                                                                        </>
+                                                                    ) : (
+                                                                        t.lol.profile.justNow
+                                                                    )}
+                                                                </div>
                                                             </div>
                                                             
                                                             <div className="flex items-center justify-between">
@@ -488,8 +547,8 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                                                                                         <img
                                                                                             src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/champion/${p.championName}.png`}
                                                                                             alt={p.championName}
+                                                                                            title={`${p.championName} - ${p.riotIdGameName}`}
                                                                                             className={`w-8 h-8 rounded-full border ${p.puuid === participant.puuid ? 'border-[#C89B3C]' : 'border-[#C89B3C]/30'} cursor-pointer hover:border-[#C89B3C] transition-colors`}
-                                                                                            title={p.riotIdGameName}
                                                                                         />
                                                                                     </Link>
                                                                                 </div>
@@ -509,8 +568,8 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                                                                                         <img
                                                                                             src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/champion/${p.championName}.png`}
                                                                                             alt={p.championName}
+                                                                                            title={`${p.championName} - ${p.riotIdGameName}`}
                                                                                             className="w-8 h-8 rounded-full border border-[#C89B3C]/30 cursor-pointer hover:border-[#C89B3C] transition-colors"
-                                                                                            title={p.riotIdGameName}
                                                                                         />
                                                                                     </Link>
                                                                                 </div>
@@ -550,7 +609,8 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                                                                             {itemId > 0 && (
                                                                                 <img
                                                                                     src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/item/${itemId}.png`}
-                                                                                    alt={`Item ${itemId}`}
+                                                                                    alt={getItemName(itemId)}
+                                                                                    title={getItemName(itemId)}
                                                                                     className="w-full h-full rounded"
                                                                                 />
                                                                             )}
@@ -563,7 +623,8 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                                                                         {participant.item6 > 0 && (
                                                                             <img
                                                                                 src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/item/${participant.item6}.png`}
-                                                                                alt="Trinket"
+                                                                                alt={getItemName(participant.item6)}
+                                                                                title={getItemName(participant.item6)}
                                                                                 className="w-full h-full rounded"
                                                                             />
                                                                         )}
@@ -574,7 +635,7 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                                                                 <div className="flex items-center ml-auto">
                                                                     <div 
                                                                         onClick={() => toggleMatchExpansion(match.metadata.matchId)}
-                                                                        className="text-[#C89B3C] opacity-50 hover:opacity-100 transition-opacity cursor-pointer"
+                                                                        className="text-[#C89B3C] opacity-50 hover:opacity-100 transition-opacity cursor-pointer select-none"
                                                                     >
                                                                         <svg 
                                                                             xmlns="http://www.w3.org/2000/svg" 
@@ -604,6 +665,7 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                                                                                 <img
                                                                                     src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/champion/${p.championName}.png`}
                                                                                     alt={p.championName}
+                                                                                    title={`${p.championName}`}
                                                                                     className="w-10 h-10 rounded-lg border border-[#C89B3C]/30"
                                                                                 />
                                                                                 <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-black/60 rounded-full border border-[#C89B3C] flex items-center justify-center text-xs font-bold">
@@ -636,7 +698,7 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                                                                                 />
                                                                             </div>
                                                                             {/* Runes */}
-                                                                            <div className="flex space-x-1">
+                                                                            <div className="flex space-x-1 relative">
                                                                                 {p.perks?.styles[0]?.selections[0]?.perk && (
                                                                                     <img
                                                                                         src={`https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/${getRuneById(p.perks.styles[0].selections[0].perk).path}/${getRuneById(p.perks.styles[0].selections[0].perk).key}/${getRuneById(p.perks.styles[0].selections[0].perk).imageName}.png`}
@@ -662,12 +724,12 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                                                                                 </div>
                                                                                 <div>
                                                                                     <div className="text-sm">{formatNumber(p.totalDamageDealtToChampions)}</div>
-                                                                                    <div className="text-xs text-gray-400">Damage</div>
+                                                                                    <div className="text-xs text-gray-400">{t.lol.profile.stats.damage}</div>
                                                                                 </div>
                                                                                 <div>
-                                                                                    <div className="text-sm">{p.totalMinionsKilled + p.neutralMinionsKilled} CS</div>
+                                                                                    <div className="text-sm">{p.totalMinionsKilled + p.neutralMinionsKilled} {t.lol.profile.stats.cs}</div>
                                                                                     <div className="text-xs text-gray-400">
-                                                                                        {((p.totalMinionsKilled + p.neutralMinionsKilled) / (match.info.gameDuration / 60)).toFixed(1)}/min
+                                                                                        {((p.totalMinionsKilled + p.neutralMinionsKilled) / (match.info.gameDuration / 60)).toFixed(1)}{t.lol.profile.csPerMin}
                                                                                     </div>
                                                                                 </div>
                                                                                 <div className="flex items-center space-x-1">
@@ -678,7 +740,8 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                                                                                                 {itemId > 0 && (
                                                                                                     <img
                                                                                                         src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/item/${itemId}.png`}
-                                                                                                        alt={`Item ${itemId}`}
+                                                                                                        alt={getItemName(itemId)}
+                                                                                                        title={getItemName(itemId)}
                                                                                                         className="absolute inset-0 w-full h-full object-cover rounded"
                                                                                                     />
                                                                                                 )}
@@ -709,43 +772,43 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                                                                                     <div className="text-[#C89B3C]">
                                                                                         {allyTeam.reduce((sum, p) => sum + p.kills, 0)} - {enemyTeam.reduce((sum, p) => sum + p.kills, 0)}
                                                                                     </div>
-                                                                                    <div className="text-xs text-gray-400">Kills</div>
+                                                                                    <div className="text-xs text-gray-400">{t.lol.profile.stats.kills}</div>
                                                                                 </div>
                                                                                 <div className="text-center">
                                                                                     <div className="text-[#C89B3C]">
                                                                                         {match.info.teams.find(t => t.teamId === participant.teamId)?.objectives.dragon.kills || 0} - {match.info.teams.find(t => t.teamId !== participant.teamId)?.objectives.dragon.kills || 0}
                                                                                     </div>
-                                                                                    <div className="text-xs text-gray-400">Dragons</div>
+                                                                                    <div className="text-xs text-gray-400">{t.lol.profile.stats.dragons}</div>
                                                                                 </div>
                                                                                 <div className="text-center">
                                                                                     <div className="text-[#C89B3C]">
                                                                                         {match.info.teams.find(t => t.teamId === participant.teamId)?.objectives.baron.kills || 0} - {match.info.teams.find(t => t.teamId !== participant.teamId)?.objectives.baron.kills || 0}
                                                                                     </div>
-                                                                                    <div className="text-xs text-gray-400">Barons</div>
+                                                                                    <div className="text-xs text-gray-400">{t.lol.profile.stats.barons}</div>
                                                                                 </div>
                                                                                 <div className="text-center">
                                                                                     <div className="text-[#C89B3C]">
                                                                                         {match.info.teams.find(t => t.teamId === participant.teamId)?.objectives.riftHerald.kills || 0} - {match.info.teams.find(t => t.teamId !== participant.teamId)?.objectives.riftHerald.kills || 0}
                                                                                     </div>
-                                                                                    <div className="text-xs text-gray-400">Heralds</div>
+                                                                                    <div className="text-xs text-gray-400">{t.lol.profile.stats.heralds}</div>
                                                                                 </div>
                                                                                 <div className="text-center">
                                                                                     <div className="text-[#C89B3C]">
                                                                                         {match.info.teams.find(t => t.teamId === participant.teamId)?.objectives.tower.kills || 0} - {match.info.teams.find(t => t.teamId !== participant.teamId)?.objectives.tower.kills || 0}
                                                                                     </div>
-                                                                                    <div className="text-xs text-gray-400">Towers</div>
+                                                                                    <div className="text-xs text-gray-400">{t.lol.profile.stats.towers}</div>
                                                                                 </div>
                                                                                 <div className="text-center">
                                                                                     <div className="text-[#C89B3C]">
                                                                                         {match.info.teams.find(t => t.teamId === participant.teamId)?.objectives.horde?.kills || 0} - {match.info.teams.find(t => t.teamId !== participant.teamId)?.objectives.horde?.kills || 0}
                                                                                     </div>
-                                                                                    <div className="text-xs text-gray-400">Grubs</div>
+                                                                                    <div className="text-xs text-gray-400">{t.lol.profile.stats.grubs}</div>
                                                                                 </div>
                                                                                 <div className="text-center">
                                                                                     <div className={`${goldDiff > 0 ? 'text-[#00FF00]' : 'text-[#FF4655]'}`}>
                                                                                         {goldDiff > 0 ? '+' : ''}{formatNumber(goldDiff)}
                                                                                     </div>
-                                                                                    <div className="text-xs text-gray-400">Gold Diff</div>
+                                                                                    <div className="text-xs text-gray-400">{t.lol.profile.stats.goldDiff}</div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -763,6 +826,7 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                                                                                 <img
                                                                                     src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/champion/${p.championName}.png`}
                                                                                     alt={p.championName}
+                                                                                    title={`${p.championName}`}
                                                                                     className="w-10 h-10 rounded-lg border border-[#C89B3C]/30"
                                                                                 />
                                                                                 <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-black/60 rounded-full border border-[#C89B3C] flex items-center justify-center text-xs font-bold">
@@ -795,7 +859,7 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                                                                                 />
                                                                             </div>
                                                                             {/* Runes */}
-                                                                            <div className="flex space-x-1">
+                                                                            <div className="flex space-x-1 relative">
                                                                                 {p.perks?.styles[0]?.selections[0]?.perk && (
                                                                                     <img
                                                                                         src={`https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/${getRuneById(p.perks.styles[0].selections[0].perk).path}/${getRuneById(p.perks.styles[0].selections[0].perk).key}/${getRuneById(p.perks.styles[0].selections[0].perk).imageName}.png`}
@@ -821,12 +885,12 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                                                                                 </div>
                                                                                 <div>
                                                                                     <div className="text-sm">{formatNumber(p.totalDamageDealtToChampions)}</div>
-                                                                                    <div className="text-xs text-gray-400">Damage</div>
+                                                                                    <div className="text-xs text-gray-400">{t.lol.profile.stats.damage}</div>
                                                                                 </div>
                                                                                 <div>
-                                                                                    <div className="text-sm">{p.totalMinionsKilled + p.neutralMinionsKilled} CS</div>
+                                                                                    <div className="text-sm">{p.totalMinionsKilled + p.neutralMinionsKilled} {t.lol.profile.stats.cs}</div>
                                                                                     <div className="text-xs text-gray-400">
-                                                                                        {((p.totalMinionsKilled + p.neutralMinionsKilled) / (match.info.gameDuration / 60)).toFixed(1)}/min
+                                                                                        {((p.totalMinionsKilled + p.neutralMinionsKilled) / (match.info.gameDuration / 60)).toFixed(1)}{t.lol.profile.csPerMin}
                                                                                     </div>
                                                                                 </div>
                                                                                 <div className="flex items-center space-x-1">
@@ -837,7 +901,8 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                                                                                                 {itemId > 0 && (
                                                                                                     <img
                                                                                                         src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/item/${itemId}.png`}
-                                                                                                        alt={`Item ${itemId}`}
+                                                                                                        alt={getItemName(itemId)}
+                                                                                                        title={getItemName(itemId)}
                                                                                                         className="absolute inset-0 w-full h-full object-cover rounded"
                                                                                                     />
                                                                                                 )}
@@ -866,9 +931,9 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                                                 : 'border-[#C89B3C]/30 text-[#C89B3C] hover:bg-black/60 transition-colors'
                                         }`}
                                     >
-                                        Previous
+                                        {t.lol.profile.previous}
                                     </button>
-                                    <span className="text-[#C89B3C]">Page {currentPage}</span>
+                                    <span className="text-[#C89B3C]">{t.lol.profile.page} {currentPage}</span>
                                     <button
                                         onClick={() => setCurrentPage(prev => prev + 1)}
                                         disabled={!hasMore || isLoadingMatches}
@@ -878,7 +943,7 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                                                 : 'border-[#C89B3C]/30 text-[#C89B3C] hover:bg-black/60 transition-colors'
                                         }`}
                                     >
-                                        Next
+                                        {t.lol.profile.next}
                                     </button>
                                 </div>
                             </div>
@@ -890,8 +955,8 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                         {/* Most Played Champions */}
                         <div className="bg-gradient-to-br from-[#111111] to-black rounded-lg border border-[#C89B3C]/30 overflow-hidden">
                             <div className="border-b border-[#C89B3C]/30 p-4">
-                                <h2 className="text-xl font-bold text-[#C89B3C]">Most Played Champions This Season</h2>
-                                <p className="text-sm text-gray-400 mt-1">Season 13</p>
+                                <h2 className="text-xl font-bold text-[#C89B3C]">{t.lol.profile.mostPlayedChampions.title}</h2>
+                                <p className="text-sm text-gray-400 mt-1">{t.lol.profile.mostPlayedChampions.season.replace('{number}', '13')}</p>
                             </div>
                             <div className="p-4">
                                 <div className="space-y-2">
@@ -904,7 +969,7 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                                                 {/* Champion Name and Games */}
                                                 <div className="flex-shrink-0 w-[30%] ml-2">
                                                     <div className="text-[#C89B3C] font-medium text-sm truncate">Champion</div>
-                                                    <div className="text-xs text-gray-400">20 games</div>
+                                                    <div className="text-xs text-gray-400">20 {t.lol.profile.mostPlayedChampions.games}</div>
                                                 </div>
 
                                                 {/* KDA */}
@@ -959,7 +1024,7 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                                 {/* View All Button */}
                                 <div className="mt-3 text-center">
                                     <button className="bg-black/40 hover:bg-black/60 text-[#C89B3C] border border-[#C89B3C]/30 rounded-lg px-4 py-1.5 text-sm transition-colors">
-                                        View All Champions
+                                        {t.lol.profile.mostPlayedChampions.viewAll}
                                     </button>
                                 </div>
                             </div>
@@ -968,7 +1033,7 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                         {/* Champion Masteries */}
                         <div className="bg-gradient-to-br from-[#111111] to-black rounded-lg border border-[#C89B3C]/30 overflow-hidden">
                             <div className="border-b border-[#C89B3C]/30 p-4">
-                                <h2 className="text-xl font-bold text-[#C89B3C]">Champion Masteries</h2>
+                                <h2 className="text-xl font-bold text-[#C89B3C]">{t.lol.profile.championMasteries.title}</h2>
                             </div>
                             <div className="p-4">
                                 <div className="space-y-4">
@@ -984,41 +1049,13 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                                             {/* Champion Info */}
                                             <div className="flex-1">
                                                 <div className="flex items-center justify-between">
-                                                    <div className="text-[#C89B3C]">Loading...</div>
-                                                    <div className="text-sm text-gray-400">0 pts</div>
+                                                    <div className="text-[#C89B3C]">{t.lol.profile.loading}</div>
+                                                    <div className="text-sm text-gray-400">0 {t.lol.profile.championMasteries.points}</div>
                                                 </div>
                                                 {/* Mastery Level Progress Bar */}
                                                 <div className="w-full h-1.5 bg-black/60 rounded-full mt-2 overflow-hidden">
                                                     <div className="h-full bg-gradient-to-r from-[#C89B3C] to-[#C8AA6E] rounded-full" style={{ width: '0%' }}></div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                        {/* LP Peak per Season */}
-                        <div className="bg-gradient-to-br from-[#111111] to-black rounded-lg border border-[#C89B3C]/30 overflow-hidden">
-                            <div className="border-b border-[#C89B3C]/30 p-4">
-                                <h2 className="text-xl font-bold text-[#C89B3C]">Ranked History</h2>
-                            </div>
-                            <div className="p-4">
-                                <div className="space-y-4">
-                                    {/* Placeholder for seasons - we'll replace with actual data later */}
-                                    {[13, 12, 11].map((season) => (
-                                        <div key={season} className="bg-black/40 backdrop-blur-sm rounded-lg p-3 flex items-center justify-between border border-[#C89B3C]/20 hover:bg-black/60 transition-colors">
-                                            <div className="flex items-center space-x-4">
-                                                <div className="w-12 h-12 bg-black/60 rounded-lg flex items-center justify-center border border-[#C89B3C]/30">
-                                                    <span className="text-[#C89B3C] font-bold">S{season}</span>
-                                                </div>
-                                                <div className="flex flex-col">
-                                                    <div className="text-[#C89B3C] font-medium">Loading...</div>
-                                                    <div className="text-sm text-gray-400">0 LP</div>
-                                                </div>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <div className="w-8 h-8 bg-black/60 rounded-lg"></div>
-                                                <span className="text-gray-400">-</span>
                                             </div>
                                         </div>
                                     ))}

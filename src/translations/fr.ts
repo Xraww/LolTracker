@@ -74,6 +74,41 @@ export const fr = {
         items: 'Objets',
         searchPlaceholder: 'Rechercher un invocateur...',
         trackStats: 'Suivez les statistiques détaillées, l\'historique des matchs et les classements de n\'importe quel joueur League of Legends.',
+        profile: {
+            matchHistory: 'Historique des matchs - Classé Solo/Duo',
+            noMatches: 'Aucun match trouvé',
+            loading: 'Chargement...',
+            victory: 'Victoire',
+            defeat: 'Défaite',
+            ago: 'il y a',
+            justNow: 'à l\'instant',
+            csPerMin: '/min',
+            totalGames: 'Total des parties',
+            previous: 'Précédent',
+            next: 'Suivant',
+            page: 'Page',
+            mostPlayedChampions: {
+                title: 'Champions les plus joués cette saison',
+                season: 'Saison {number}',
+                games: 'parties',
+                viewAll: 'Voir tous les champions'
+            },
+            championMasteries: {
+                title: 'Maîtrises des champions',
+                points: 'pts'
+            },
+            stats: {
+                kills: 'Éliminations',
+                dragons: 'Dragons',
+                barons: 'Barons',
+                heralds: 'Hérauts',
+                towers: 'Tours',
+                grubs: 'Larves',
+                goldDiff: 'Diff. d\'or',
+                damage: 'Dégâts',
+                cs: 'CS'
+            }
+        },
     },
     footer: {
         about: {

@@ -74,6 +74,41 @@ export const en = {
         items: 'Items',
         searchPlaceholder: 'Search summoner...',
         trackStats: 'Track detailed statistics, match history and rankings for any League of Legends player.',
+        profile: {
+            matchHistory: 'Match History - Ranked Solo/Duo',
+            noMatches: 'No matches found',
+            loading: 'Loading...',
+            victory: 'Victory',
+            defeat: 'Defeat',
+            ago: 'ago',
+            justNow: 'just now',
+            csPerMin: '/min',
+            totalGames: 'Total Games',
+            previous: 'Previous',
+            next: 'Next',
+            page: 'Page',
+            mostPlayedChampions: {
+                title: 'Most Played Champions This Season',
+                season: 'Season {number}',
+                games: 'games',
+                viewAll: 'View All Champions'
+            },
+            championMasteries: {
+                title: 'Champion Masteries',
+                points: 'pts'
+            },
+            stats: {
+                kills: 'Kills',
+                dragons: 'Dragons',
+                barons: 'Barons',
+                heralds: 'Heralds',
+                towers: 'Towers',
+                grubs: 'Grubs',
+                goldDiff: 'Gold Diff',
+                damage: 'Damage',
+                cs: 'CS'
+            }
+        },
     },
     footer: {
         about: {
