@@ -8,6 +8,7 @@ export const fr = {
         viewLeaderboards: 'Voir les classements',
         joinDiscord: 'Rejoindre Discord',
         signUp: 'S\'inscrire',
+        noResults: 'Aucun objet trouvé correspondant à vos critères',
     },
     home: {
         hero: {
@@ -65,13 +66,37 @@ export const fr = {
             placeholder: "Entrez un Riot ID (ex: Joueur#TAG)",
             errors: {
                 emptySearch: "Veuillez entrer un Riot ID",
-                invalidFormat: "Format invalide. Utilisez le format: Nom#Tag",
-                generic: "Une erreur est survenue lors de la recherche",
+                invalidFormat: "Format invalide. Veuillez utiliser le format : Nom#Tag",
+                generic: "Une erreur s'est produite lors de la récupération des données du joueur",
                 notFound: "Joueur non trouvé"
             }
         },
         champions: 'Champions',
         items: 'Objets',
+        itemsPage: {
+            title: 'Objets de League of Legends',
+            filters: {
+                all: 'Tous',
+                starter: 'Objets de départ',
+                basic: 'Objets de base',
+                epic: 'Objets épiques',
+                legendary: 'Objets légendaires',
+                boots: 'Bottes',
+                consumable: 'Potions & Consommables',
+                trinket: 'Trinkets',
+                fighter: 'Combattant',
+                tank: 'Tank',
+                mage: 'Mage',
+                assassin: 'Assassin',
+                marksman: 'Tireur',
+                support: 'Support',
+                sortBy: {
+                    nameAZ: 'Nom (A-Z)',
+                    priceLowHigh: 'Prix (Croissant)',
+                    priceHighLow: 'Prix (Décroissant)'
+                }
+            }
+        },
         searchPlaceholder: 'Rechercher un invocateur...',
         trackStats: 'Suivez les statistiques détaillées, l\'historique des matchs et les classements de n\'importe quel joueur League of Legends.',
         profile: {

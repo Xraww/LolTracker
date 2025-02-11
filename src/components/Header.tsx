@@ -10,7 +10,6 @@ import { useState, useEffect } from 'react';
 const menuItems = [
     { name: 'Leaderboard', path: '/lol/leaderboard' },
     { name: 'Search Player', path: '/lol/search-player' },
-    { name: 'Stats', path: '/lol/stats' },
     { name: 'Champions', path: '/lol/champions' },
     { name: 'Items', path: '/lol/items' }
 ];

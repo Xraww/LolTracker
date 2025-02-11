@@ -8,6 +8,7 @@ export const en = {
         viewLeaderboards: 'View Leaderboards',
         joinDiscord: 'Join Discord',
         signUp: 'Sign Up',
+        noResults: 'No items found matching your criteria',
     },
     home: {
         hero: {
@@ -72,6 +73,30 @@ export const en = {
         },
         champions: 'Champions',
         items: 'Items',
+        itemsPage: {
+            title: 'League of Legends Items',
+            filters: {
+                all: 'All',
+                starter: 'Starter Items',
+                basic: 'Basic Items',
+                epic: 'Epic Items',
+                legendary: 'Legendary Items',
+                boots: 'Boots',
+                consumable: 'Potions & Consumables',
+                trinket: 'Trinkets',
+                fighter: 'Fighter',
+                tank: 'Tank',
+                mage: 'Mage',
+                assassin: 'Assassin',
+                marksman: 'Marksman',
+                support: 'Support',
+                sortBy: {
+                    nameAZ: 'Name (A-Z)',
+                    priceLowHigh: 'Price (Low to High)',
+                    priceHighLow: 'Price (High to Low)'
+                }
+            }
+        },
         searchPlaceholder: 'Search summoner...',
         trackStats: 'Track detailed statistics, match history and rankings for any League of Legends player.',
         profile: {
