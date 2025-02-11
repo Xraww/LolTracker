@@ -1,6 +1,5 @@
 'use client';
 
-import { useLanguage } from "@/context/LanguageContext";
 import { CompleteSummonerInfo } from '@/types/riot-api';
 import { getProfileIconUrl } from '@/lib/api-utils';
 
@@ -21,6 +20,7 @@ const ProfileHeader = ({ summonerData, currentVersion }: ProfileHeaderProps) => 
                             alt="Profile Icon"
                             className="w-32 h-32 rounded-full border-2 border-[#C89B3C]"
                         />
+
                         <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-[#1E2328] px-4 py-1 rounded-full border border-[#C89B3C]/50 text-sm">
                             {summonerData.summoner.summonerLevel}
                         </div>
@@ -49,12 +49,14 @@ const ProfileHeader = ({ summonerData, currentVersion }: ProfileHeaderProps) => 
                                                 alt={`${rank.tier} Rank`}
                                                 className="w-8 h-8"
                                             />
+
                                             <span className="text-white text-lg">
                                                 {rank.tier === 'CHALLENGER' || rank.tier === 'GRANDMASTER' || rank.tier === 'MASTER' 
                                                     ? rank.tier 
                                                     : `${rank.tier} ${rank.rank}`
                                                 }
                                             </span>
+
                                             <span className="text-[#C89B3C] font-bold">
                                                 {rank.leaguePoints} LP
                                             </span>
@@ -68,10 +70,12 @@ const ProfileHeader = ({ summonerData, currentVersion }: ProfileHeaderProps) => 
                                                     <span className="text-gray-400 mx-1">/</span>
                                                     <span className="text-[#FF4655] font-medium">{rank.losses}L</span>
                                                 </div>
+
                                                 <div className="font-bold text-[#C89B3C]">
                                                     {Math.round((rank.wins / (rank.wins + rank.losses)) * 100)}%
                                                 </div>
                                             </div>
+
                                             <div className="w-full h-2 bg-[#1E2328] rounded-full overflow-hidden">
                                                 <div 
                                                     className="h-full bg-gradient-to-r from-[#C89B3C] to-[#C89B3C] rounded-full"
@@ -80,6 +84,7 @@ const ProfileHeader = ({ summonerData, currentVersion }: ProfileHeaderProps) => 
                                                     }}
                                                 />
                                             </div>
+
                                             <div className="text-gray-400 text-sm mt-1 text-center">
                                                 Total Games: {rank.wins + rank.losses}
                                             </div>

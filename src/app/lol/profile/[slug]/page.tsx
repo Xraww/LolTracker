@@ -103,7 +103,10 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                     {/* Right Side Containers */}
                     <div className="space-y-6">
                         <MostPlayedChampions />
-                        <ChampionMasteries />
+                        <ChampionMasteries 
+                            summonerData={summonerData} 
+                            currentVersion={currentVersion} 
+                        />
                     </div>
                 </div>
             </div>

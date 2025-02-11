@@ -95,7 +95,8 @@ export const fr = {
             },
             championMasteries: {
                 title: 'Maîtrises des champions',
-                points: 'pts'
+                points: 'pts',
+                name: 'Maîtrise'
             },
             stats: {
                 kills: 'Éliminations',
