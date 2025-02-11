@@ -14,6 +14,7 @@ interface MatchCardProps {
     onFetchRanks: (players: { riotIdGameName: string, riotIdTagline: string }[]) => void;
     playerRanks: { [key: string]: { data: any[], timestamp: number } };
     itemNames: { [key: string]: string };
+    region: string;
 }
 
 const MatchCard = ({
@@ -24,7 +25,8 @@ const MatchCard = ({
     onToggleExpand,
     onFetchRanks,
     playerRanks,
-    itemNames
+    itemNames,
+    region
 }: MatchCardProps) => {
     const { t } = useLanguage();
     const participant = match.info.participants.find(p => p.puuid === participantPuuid);
@@ -121,7 +123,7 @@ const MatchCard = ({
                                     .filter(p => p.teamId === participant.teamId)
                                     .map((p, idx) => (
                                         <div key={idx} className="relative">
-                                            <Link href={`/lol/profile/${encodeURIComponent(p.riotIdGameName)}-${encodeURIComponent(p.riotIdTagline)}`}>
+                                            <Link href={`/lol/profile/${encodeURIComponent(p.riotIdGameName)}-${encodeURIComponent(p.riotIdTagline)}?region=${region}`}>
                                                 <img
                                                     src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/champion/${p.championName}.png`}
                                                     alt={p.championName}
@@ -142,7 +144,7 @@ const MatchCard = ({
                                     .filter(p => p.teamId !== participant.teamId)
                                     .map((p, idx) => (
                                         <div key={idx}>
-                                            <Link href={`/lol/profile/${encodeURIComponent(p.riotIdGameName)}-${encodeURIComponent(p.riotIdTagline)}`}>
+                                            <Link href={`/lol/profile/${encodeURIComponent(p.riotIdGameName)}-${encodeURIComponent(p.riotIdTagline)}?region=${region}`}>
                                                 <img
                                                     src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/champion/${p.championName}.png`}
                                                     alt={p.championName}
@@ -196,6 +198,7 @@ const MatchCard = ({
                                 </div>
                             ))}
                         </div>
+                        
                         {/* Trinket (with spacing) */}
                         <div className="ml-4">
                             <div className="w-6 h-6 bg-black/60 rounded border border-[#C89B3C]/30">

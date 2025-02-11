@@ -7,6 +7,7 @@ import { CompleteSummonerInfo } from '@/types/riot-api';
 interface ChampionMasteriesProps {
     summonerData: CompleteSummonerInfo;
     currentVersion: string;
+    region: string;
 }
 
 interface ChampionMastery {
@@ -20,7 +21,7 @@ interface ChampionMastery {
     chestGranted: boolean;
 }
 
-const ChampionMasteries = ({ summonerData, currentVersion }: ChampionMasteriesProps) => {
+const ChampionMasteries = ({ summonerData, currentVersion, region }: ChampionMasteriesProps) => {
     const { t } = useLanguage();
     const [masteries, setMasteries] = useState<ChampionMastery[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -48,7 +49,7 @@ const ChampionMasteries = ({ summonerData, currentVersion }: ChampionMasteriesPr
             if (!summonerData?.summoner.puuid) return;
 
             try {
-                const response = await fetch(`/api/lol/masteries?puuid=${summonerData.summoner.puuid}`);
+                const response = await fetch(`/api/lol/masteries?puuid=${summonerData.summoner.puuid}&region=${region}`);
                 const data = await response.json();
 
                 if (!response.ok) {
@@ -65,7 +66,7 @@ const ChampionMasteries = ({ summonerData, currentVersion }: ChampionMasteriesPr
         };
 
         fetchMasteries();
-    }, [summonerData]);
+    }, [summonerData, region]);
 
     const getChampionNameById = (championId: number): { name: string, id: string } => {
         const champion = Object.values(championData).find(c => c.key === championId.toString());
@@ -110,6 +111,7 @@ const ChampionMasteries = ({ summonerData, currentVersion }: ChampionMasteriesPr
                 <div className="border-b border-[#C89B3C]/30 p-4">
                     <h2 className="text-xl font-bold text-[#C89B3C]">{t.lol.profile.championMasteries.title}</h2>
                 </div>
+
                 <div className="p-4">
                     <div className="text-[#FF4655] text-center">{error}</div>
                 </div>
@@ -124,6 +126,7 @@ const ChampionMasteries = ({ summonerData, currentVersion }: ChampionMasteriesPr
             <div className="border-b border-[#C89B3C]/30 p-4">
                 <h2 className="text-xl font-bold text-[#C89B3C]">{t.lol.profile.championMasteries.title}</h2>
             </div>
+
             <div className="p-4">
                 <div className="space-y-4">
                     {sortedMasteries.map((mastery, index) => {
@@ -139,6 +142,7 @@ const ChampionMasteries = ({ summonerData, currentVersion }: ChampionMasteriesPr
                                         className="w-12 h-12 rounded-lg border border-[#C89B3C]/30"
                                     />
                                 </div>
+                                
                                 {/* Champion Info */}
                                 <div className="flex-1">
                                     {/* First Row: Champion Name and Points */}

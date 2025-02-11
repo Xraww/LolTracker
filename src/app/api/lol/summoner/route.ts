@@ -1,4 +1,4 @@
-import { API_ENDPOINTS, DEFAULT_REGION, Region, getRegionalFromRegion } from '@/lib/api-config';
+import { API_ENDPOINTS, Region, getRegionalFromRegion } from '@/lib/api-config';
 import { fetchRiotApi } from '@/lib/api-utils';
 import { CompleteSummonerInfo, RiotAccountDTO, SummonerDTO, LeagueEntryDTO } from '@/types/riot-api';
 import { NextRequest, NextResponse } from 'next/server';
@@ -7,12 +7,12 @@ export async function GET(request: NextRequest) {
     try {
         const searchParams = request.nextUrl.searchParams;
         const gameName = searchParams.get('name');
-        const tagLine = searchParams.get('tag') || 'EUW';
-        const region = (searchParams.get('region') as Region) || DEFAULT_REGION;
+        const tagLine = searchParams.get('tag');
+        const region = searchParams.get('region') as Region;
 
-        if (!gameName) {
+        if (!gameName || !tagLine || !region) {
             return NextResponse.json(
-                { error: 'Game name is required' },
+                { error: 'Game name, tag, and region are required' },
                 { status: 400 }
             );
         }
@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
             return NextResponse.json(
                 { 
                     error: summonerResponse.error.status.message,
-                    details: `Failed to fetch summoner data for PUUID: ${accountResponse.data.puuid}`
+                    details: `Failed to fetch summoner data for PUUID: ${accountResponse.data.puuid}, gameName: ${gameName}, tagLine: ${tagLine}, region: ${region}`
                 },
                 { status: summonerResponse.error.status.status_code }
             );

@@ -10,9 +10,10 @@ import MatchStats from './MatchStats';
 interface MatchHistoryProps {
     summonerData: CompleteSummonerInfo;
     currentVersion: string;
+    region: string;
 }
 
-const MatchHistory = ({ summonerData, currentVersion }: MatchHistoryProps) => {
+const MatchHistory = ({ summonerData, currentVersion, region }: MatchHistoryProps) => {
     const { t } = useLanguage();
     const [isLoadingMatches, setIsLoadingMatches] = useState(false);
     const [matchError, setMatchError] = useState<string | null>(null);
@@ -34,7 +35,7 @@ const MatchHistory = ({ summonerData, currentVersion }: MatchHistoryProps) => {
         
         try {
             const start = (currentPage - 1) * MATCHES_PER_PAGE;
-            const response = await fetch(`/api/lol/matches?puuid=${summonerData.summoner.puuid}&count=${MATCHES_PER_PAGE}&start=${start}`);
+            const response = await fetch(`/api/lol/matches?puuid=${summonerData.summoner.puuid}&count=${MATCHES_PER_PAGE}&start=${start}&region=${region}`);
             const data = await response.json();
             
             if (!response.ok) {
@@ -87,7 +88,7 @@ const MatchHistory = ({ summonerData, currentVersion }: MatchHistoryProps) => {
             const batch = playersToFetch.slice(i, i + batchSize);
             const promises = batch.map(async (player) => {
                 try {
-                    const response = await fetch(`/api/lol/summoner?name=${encodeURIComponent(player.riotIdGameName)}&tag=${encodeURIComponent(player.riotIdTagline)}`);
+                    const response = await fetch(`/api/lol/summoner?name=${encodeURIComponent(player.riotIdGameName)}&tag=${encodeURIComponent(player.riotIdTagline)}&region=${region}`);
                     const data = await response.json();
                     if (response.ok && data.ranked) {
                         return { 
@@ -190,6 +191,7 @@ const MatchHistory = ({ summonerData, currentVersion }: MatchHistoryProps) => {
                                         onFetchRanks={fetchPlayerRanks}
                                         playerRanks={playerRanks}
                                         itemNames={itemNames}
+                                        region={region}
                                     />
 
                                     {expandedMatches.has(match.metadata.matchId) && (

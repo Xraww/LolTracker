@@ -76,6 +76,7 @@ const LanguageSelector = () => {
                         <selectedLanguage.Flag />
                     </div>
                 )}
+                
                 <FontAwesomeIcon 
                     icon={faGlobe} 
                     className={`transition-all duration-300 ${isOpen ? 'rotate-180 opacity-0' : 'group-hover:opacity-0'}`}

@@ -1,8 +1,14 @@
 'use client';
 
 import { useLanguage } from "@/context/LanguageContext";
+import { CompleteSummonerInfo } from '@/types/riot-api';
 
-const MostPlayedChampions = () => {
+interface MostPlayedChampionsProps {
+    summonerData: CompleteSummonerInfo;
+    region: string;
+}
+
+const MostPlayedChampions = ({ summonerData, region }: MostPlayedChampionsProps) => {
     const { t } = useLanguage();
 
     return (
@@ -31,6 +37,7 @@ const MostPlayedChampions = () => {
                                         <span className="text-gray-400 text-xs">KDA</span>
                                         <span className="text-[#C89B3C] text-xs">4.2</span>
                                     </div>
+
                                     <div className="text-white text-xs text-center">3.2 / 1.8 / 4.5</div>
                                 </div>
 
@@ -66,6 +73,7 @@ const MostPlayedChampions = () => {
                                                 </linearGradient>
                                             </defs>
                                         </svg>
+                                        
                                         <span className="absolute inset-0 flex items-center justify-center text-[10px] font-medium text-[#C89B3C]">55%</span>
                                     </div>
                                 </div>

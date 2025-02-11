@@ -103,20 +103,25 @@ const TeamDetails = ({
                         <div className="flex-1 grid grid-cols-4 gap-4">
                             <div>
                                 <div className="text-sm">{p.kills}/{p.deaths}/{p.assists}</div>
+
                                 <div className="text-xs text-[#C89B3C]">
                                     {((p.kills + p.assists) / Math.max(1, p.deaths)).toFixed(2)} KDA
                                 </div>
                             </div>
+
                             <div>
                                 <div className="text-sm">{formatNumber(p.totalDamageDealtToChampions)}</div>
                                 <div className="text-xs text-gray-400">{t.lol.profile.stats.damage}</div>
                             </div>
+
                             <div>
                                 <div className="text-sm">{p.totalMinionsKilled + p.neutralMinionsKilled} {t.lol.profile.stats.cs}</div>
+                                
                                 <div className="text-xs text-gray-400">
                                     {((p.totalMinionsKilled + p.neutralMinionsKilled) / (match.info.gameDuration / 60)).toFixed(1)}{t.lol.profile.csPerMin}
                                 </div>
                             </div>
+
                             <div className="flex items-center space-x-1">
                                 {[p.item0, p.item1, p.item2, p.item3, p.item4, p.item5, p.item6]
                                     .sort((a, b) => (a > 0 ? -1 : 1))

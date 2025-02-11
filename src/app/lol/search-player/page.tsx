@@ -12,10 +12,26 @@ export default function SearchPlayer() {
     const router = useRouter();
     const { t } = useLanguage();
     const [searchQuery, setSearchQuery] = useState('');
+    const [selectedRegion, setSelectedRegion] = useState('EUW1');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [summonerData, setSummonerData] = useState<CompleteSummonerInfo | null>(null);
     const [currentVersion, setCurrentVersion] = useState<string>('13.24.1');
+
+    // Available regions for the dropdown
+    const regions = [
+        { value: 'EUW1', label: 'EUW' },
+        { value: 'NA1', label: 'NA' },
+        { value: 'KR', label: 'KR' },
+        { value: 'BR1', label: 'BR' },
+        { value: 'EUN1', label: 'EUNE' },
+        { value: 'JP1', label: 'JP' },
+        { value: 'LA1', label: 'LAN' },
+        { value: 'LA2', label: 'LAS' },
+        { value: 'OC1', label: 'OCE' },
+        { value: 'TR1', label: 'TR' },
+        { value: 'RU', label: 'RU' }
+    ];
 
     useEffect(() => {
         // Fetch current LoL version when component mounts
@@ -44,7 +60,7 @@ export default function SearchPlayer() {
 
         setIsLoading(true);
         try {
-            const response = await fetch(`/api/lol/summoner?name=${encodeURIComponent(gameName)}&tag=${encodeURIComponent(tagLine)}`);
+            const response = await fetch(`/api/lol/summoner?name=${encodeURIComponent(gameName)}&tag=${encodeURIComponent(tagLine)}&region=${selectedRegion}`);
             const data = await response.json();
 
             if (!response.ok) {
@@ -61,7 +77,7 @@ export default function SearchPlayer() {
 
     const navigateToProfile = () => {
         if (summonerData) {
-            router.push(`/lol/profile/${encodeURIComponent(summonerData.account.gameName)}-${encodeURIComponent(summonerData.account.tagLine)}`);
+            router.push(`/lol/profile/${encodeURIComponent(summonerData.account.gameName)}-${encodeURIComponent(summonerData.account.tagLine)}?region=${selectedRegion}`);
         }
     };
 
@@ -107,6 +123,7 @@ export default function SearchPlayer() {
                         <div className="absolute -top-2 sm:-top-3 -right-2 sm:-right-3 w-4 sm:w-6 h-4 sm:h-6 border-t-2 border-r-2 border-[#C89B3C]/30" />
                         <div className="absolute -bottom-2 sm:-bottom-3 -left-2 sm:-left-3 w-4 sm:w-6 h-4 sm:h-6 border-b-2 border-l-2 border-[#C89B3C]/30" />
                     </h1>
+
                     <p className="text-base sm:text-lg md:text-xl text-white/80 max-w-[600px] mx-auto leading-relaxed px-4">
                         {t.lol.searchPlayerPage.description}
                     </p>
@@ -114,23 +131,56 @@ export default function SearchPlayer() {
 
                 {/* Search Form */}
                 <form onSubmit={handleSearch} className="mb-6 sm:mb-8 md:mb-10">
-                    <div className="flex max-w-[600px] mx-auto bg-gradient-to-br from-black to-lol-dark text-white border border-[#C89B3C]/30 rounded-full p-1 sm:p-2 shadow-lg shadow-black/20 items-center transition-all duration-300 hover:border-[#C89B3C]/60 hover:shadow-[#C89B3C]/10 hover:-translate-y-0.5">
-                        <SiRiotgames className="text-[#C89B3C] text-xl sm:text-2xl ml-3 sm:ml-6 opacity-80" />
-                        <input 
-                            type="text"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder={t.lol.searchPlayerPage.placeholder}
-                            className="flex-1 px-3 sm:px-6 py-3 sm:py-4 bg-transparent text-[#F0E6D2] text-base sm:text-lg font-medium placeholder:text-[#C8AA6E]/40 focus:outline-none"
-                            disabled={isLoading}
-                        />
-                        <button 
-                            type="submit"
-                            className={`bg-[#C89B3C] px-4 sm:px-8 py-3 sm:py-4 rounded-full transition-all duration-300 hover:bg-[#C8AA6E] hover:-translate-y-0.5 mr-0.5 sm:mr-1 text-[#1E2328] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#C89B3C] disabled:hover:translate-y-0`}
-                            disabled={isLoading}
-                        >
-                            <BiSearch className="text-xl sm:text-2xl" />
-                        </button>
+                    <div className="flex flex-col sm:flex-row max-w-[600px] mx-auto gap-2 sm:gap-2">
+                        {/* Search Input with Region Selector */}
+                        <div className="flex flex-1 bg-gradient-to-br from-black to-lol-dark text-white border border-[#C89B3C]/30 rounded-full p-1 sm:p-2 shadow-lg shadow-black/20 items-center transition-all duration-300 hover:border-[#C89B3C]/60 hover:shadow-[#C89B3C]/10 hover:-translate-y-0.5">
+                            {/* Region Selector */}
+                            <div className="relative min-w-[90px] ml-2">
+                                <select
+                                    value={selectedRegion}
+                                    onChange={(e) => setSelectedRegion(e.target.value)}
+                                    className="appearance-none w-full bg-transparent text-[#C89B3C] pr-6 focus:outline-none font-semibold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-center"
+                                    disabled={isLoading}
+                                >
+                                    {regions.map((region) => (
+                                        <option 
+                                            key={region.value} 
+                                            value={region.value}
+                                            className="bg-black text-[#C89B3C] font-semibold"
+                                        >
+                                            {region.label}
+                                        </option>
+                                    ))}
+                                </select>
+
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center text-[#C89B3C]">
+                                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            {/* Divider */}
+                            <div className="w-px h-6 bg-[#C89B3C]/30 mx-3" />
+
+                            <SiRiotgames className="text-[#C89B3C] text-xl sm:text-2xl opacity-80" />
+                            
+                            <input 
+                                type="text"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                placeholder={t.lol.searchPlayerPage.placeholder}
+                                className="flex-1 px-3 sm:px-6 py-3 sm:py-4 bg-transparent text-[#F0E6D2] text-base sm:text-lg font-medium placeholder:text-[#C8AA6E]/40 focus:outline-none"
+                                disabled={isLoading}
+                            />
+                            <button 
+                                type="submit"
+                                className={`bg-[#C89B3C] px-4 sm:px-8 py-3 sm:py-4 rounded-full transition-all duration-300 hover:bg-[#C8AA6E] hover:-translate-y-0.5 mr-0.5 sm:mr-1 text-[#1E2328] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#C89B3C] disabled:hover:translate-y-0`}
+                                disabled={isLoading}
+                            >
+                                <BiSearch className="text-xl sm:text-2xl" />
+                            </button>
+                        </div>
                     </div>
                 </form>
 
@@ -163,11 +213,13 @@ export default function SearchPlayer() {
                                 alt="Profile Icon"
                                 className="w-16 h-16 rounded-full border-2 border-[#C89B3C] group-hover:border-[#C8AA6E] transition-colors duration-300"
                             />
+
                             <div className="text-left">
                                 <h2 className="text-xl font-bold text-[#C89B3C] group-hover:text-[#C8AA6E] transition-colors duration-300">
                                     {summonerData.account.gameName}
                                     <span className="text-sm text-[#C8AA6E] ml-2 opacity-80">#{summonerData.account.tagLine}</span>
                                 </h2>
+
                                 <p className="text-[#C8AA6E]/60 group-hover:text-[#C8AA6E]/80 transition-colors duration-300">
                                     Level {summonerData.summoner.summonerLevel}
                                 </p>
@@ -186,6 +238,7 @@ export default function SearchPlayer() {
                                                     alt={`${rank.tier} Rank`}
                                                     className="w-8 h-8 object-contain"
                                                 />
+
                                                 <div>
                                                     <span className="text-[#C89B3C] font-bold group-hover:text-[#C8AA6E] transition-colors duration-300">
                                                         {rank.tier === 'CHALLENGER' || rank.tier === 'GRANDMASTER' || rank.tier === 'MASTER' 
@@ -193,11 +246,13 @@ export default function SearchPlayer() {
                                                             : `${rank.tier} ${rank.rank}`
                                                         }
                                                     </span>
+
                                                     <span className="text-[#C8AA6E]/60 ml-2 group-hover:text-[#C8AA6E]/80 transition-colors duration-300">
                                                         - {rank.leaguePoints} LP
                                                     </span>
                                                 </div>
                                             </div>
+                                            
                                             <div className="text-[#C8AA6E]/60 group-hover:text-[#C8AA6E]/80 transition-colors duration-300">
                                                 {rank.wins}W - {rank.losses}L
                                                 <span className="ml-2">

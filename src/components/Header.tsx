@@ -85,11 +85,13 @@ const Header = () => {
                                 {item.name}
                             </Link>
                         ))}
+
                         <div className="flex flex-col gap-4 mt-6 w-full max-w-[280px]">
                             <button className="w-full h-[45px] flex items-center justify-center gap-2 rounded-lg font-semibold text-white bg-[#5865F2] hover:bg-[#4752c4] transition-colors">
                                 <FontAwesomeIcon icon={faDiscord} />
                                 Discord
                             </button>
+
                             <button className="w-[45px] h-[45px] mx-auto flex items-center justify-center rounded-full border border-white/20 text-white hover:border-white/40 hover:bg-white/5 transition-colors">
                                 <FontAwesomeIcon icon={faUser} className="w-4 h-4" />
                             </button>
@@ -120,6 +122,7 @@ const Header = () => {
                         <FontAwesomeIcon icon={faDiscord} />
                         <span className="hidden lg:inline">Discord</span>
                     </button>
+                    
                     <button className="w-[38px] h-[38px] flex items-center justify-center rounded-full border border-white/20 text-white hover:border-white/40 hover:bg-white/5 transition-colors">
                         <FontAwesomeIcon icon={faUser} className="w-4 h-4" />
                     </button>

@@ -5,7 +5,7 @@ import { en } from '@/translations/en';
 import { fr } from '@/translations/fr';
 
 type Language = 'en' | 'fr';
-type Translations = typeof en;
+type Translations = typeof en | typeof fr;
 
 type LanguageContextType = {
     language: Language;

@@ -22,6 +22,7 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
     const [error, setError] = useState<string | null>(null);
     const [summonerData, setSummonerData] = useState<CompleteSummonerInfo | null>(null);
     const [currentVersion, setCurrentVersion] = useState<string>('13.24.1');
+    const [region, setRegion] = useState<string>('');
 
     useEffect(() => {
         const fetchSummonerData = async () => {
@@ -32,12 +33,22 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                     throw new Error('Invalid summoner name format');
                 }
 
+                // Get region from URL search params
+                const urlParams = new URLSearchParams(window.location.search);
+                const regionParam = urlParams.get('region');
+                
+                if (!regionParam) {
+                    throw new Error('Region is required');
+                }
+
+                setRegion(regionParam);
+
                 // Fetch current LoL version
                 const version = await getCurrentLoLVersion();
                 setCurrentVersion(version);
 
-                // Fetch summoner data
-                const response = await fetch(`/api/lol/summoner?name=${encodeURIComponent(gameName)}&tag=${encodeURIComponent(tagLine)}`);
+                // Fetch summoner data with region
+                const response = await fetch(`/api/lol/summoner?name=${encodeURIComponent(gameName)}&tag=${encodeURIComponent(tagLine)}&region=${regionParam}`);
                 const data = await response.json();
 
                 if (!response.ok) {
@@ -90,23 +101,20 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
     return (
         <div className="min-h-screen bg-gradient-to-[135deg] from-[#0A1428] to-[#091428] text-white pt-16">
             {/* Profile Header */}
-            <ProfileHeader summonerData={summonerData} currentVersion={currentVersion}/>
+            <ProfileHeader summonerData={summonerData} currentVersion={currentVersion} />
 
             {/* Main Content */}
             <div className="container mx-auto px-4 py-8">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Match History */}
                     <div className="lg:col-span-2">
-                        <MatchHistory summonerData={summonerData} currentVersion={currentVersion}/>
+                        <MatchHistory summonerData={summonerData} currentVersion={currentVersion}region={region}/>
                     </div>
 
                     {/* Right Side Containers */}
                     <div className="space-y-6">
-                        <MostPlayedChampions />
-                        <ChampionMasteries 
-                            summonerData={summonerData} 
-                            currentVersion={currentVersion} 
-                        />
+                        <MostPlayedChampions summonerData={summonerData} region={region}/>
+                        <ChampionMasteries summonerData={summonerData} currentVersion={currentVersion}region={region}/>
                     </div>
                 </div>
             </div>
