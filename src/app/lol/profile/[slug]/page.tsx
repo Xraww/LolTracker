@@ -108,13 +108,13 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Match History */}
                     <div className="lg:col-span-2">
-                        <MatchHistory summonerData={summonerData} currentVersion={currentVersion}region={region}/>
+                        <MatchHistory summonerData={summonerData} currentVersion={currentVersion} region={region}/>
                     </div>
 
                     {/* Right Side Containers */}
                     <div className="space-y-6">
-                        <MostPlayedChampions summonerData={summonerData} region={region}/>
-                        <ChampionMasteries summonerData={summonerData} currentVersion={currentVersion}region={region}/>
+                        <MostPlayedChampions summonerData={summonerData} currentVersion={currentVersion} region={region}/>
+                        <ChampionMasteries summonerData={summonerData} currentVersion={currentVersion} region={region}/>
                     </div>
                 </div>
             </div>

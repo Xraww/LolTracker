@@ -88,7 +88,7 @@ export const en = {
             next: 'Next',
             page: 'Page',
             mostPlayedChampions: {
-                title: 'Most Played Champions This Season',
+                title: 'Most Played Champions (Last 100 matches)',
                 season: 'Season {number}',
                 games: 'games',
                 viewAll: 'View All Champions'
