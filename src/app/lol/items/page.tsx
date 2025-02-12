@@ -518,6 +518,7 @@ export default function Items() {
             <div className="container mx-auto p-4">
                 <div className="animate-pulse">
                     <div className="h-8 bg-gray-300 rounded w-48 mb-4"></div>
+
                     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         {[...Array(12)].map((_, i) => (
                             <div key={i} className="bg-gray-300 h-48 rounded"></div>
@@ -529,7 +530,7 @@ export default function Items() {
     }
 
     return (
-        <div className="container mx-auto p-4">
+        <div className="container max-w-[1400px] mx-auto p-4">
             <h1 className="text-3xl font-bold mb-6">{t.lol.itemsPage.title}</h1>
 
             {/* Search Input */}
@@ -542,6 +543,7 @@ export default function Items() {
                         value={filters.search}
                         onChange={(e) => setFilters({ search: e.target.value })}
                     />
+
                     <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
                         <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -563,10 +565,12 @@ export default function Items() {
                         <div key={category.id} className="bg-gradient-to-br from-black to-lol-dark rounded-lg p-4">
                             <h2 className="text-xl font-semibold mb-4 text-[#C89B3C] flex items-center justify-between">
                                 <span>{category.title}</span>
+
                                 <span className="text-sm bg-black/40 px-2 py-1 rounded border border-[#C89B3C]/30">
                                     {categoryItems.length} {categoryItems.length === 1 ? 'item' : 'items'}
                                 </span>
                             </h2>
+
                             <div className="flex flex-wrap gap-2">
                                 {categoryItems.map(item => {
                                     const parsedDescription = parseItemDescription(item.description);
@@ -578,6 +582,7 @@ export default function Items() {
                                             {/* Item Icon */}
                                             <div className="w-16 h-16 rounded border border-[#C89B3C]/30 hover:border-[#C89B3C]/60 transition-all duration-300 relative overflow-hidden cursor-pointer">
                                                 <div className="absolute inset-0 bg-gradient-to-br from-[#C89B3C]/20 to-black/50" />
+
                                                 <img
                                                     src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/item/${item.image.full}`}
                                                     alt={item.name}
@@ -604,14 +609,17 @@ export default function Items() {
                                                         {/* Image with gold border */}
                                                         <div className="relative">
                                                             <div className="absolute inset-0 bg-gradient-to-br from-[#C89B3C]/20 to-black/50 rounded" />
+
                                                             <img
                                                                 src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/item/${item.image.full}`}
                                                                 alt={item.name}
                                                                 className="w-12 h-12 rounded relative z-10"
                                                             />
                                                         </div>
+
                                                         <div>
                                                             <h3 className="font-semibold text-lg text-white">{item.name}</h3>
+
                                                             <p className="text-[#C89B3C]">
                                                                 {item.gold.total} ({item.gold.sell})
                                                             </p>
@@ -622,6 +630,7 @@ export default function Items() {
                                                     {item.from && item.from.length > 0 && (
                                                         <div className="mt-3 p-2 bg-black/40 rounded border border-[#C89B3C]/30">
                                                             <p className="text-xs text-[#C89B3C] mb-2">Build Path:</p>
+
                                                             <div className="flex flex-wrap gap-2">
                                                                 {item.from.map((componentId: string, index: number) => {
                                                                     const component = items.find(i => i.id === componentId);
@@ -640,8 +649,9 @@ export default function Items() {
                                                                     ) : null;
                                                                 })}
                                                             </div>
+
                                                             <p className="text-xs text-gray-400 mt-2">
-                                                                + {item.gold.base} gold
+                                                                + {item.gold.base} golds
                                                             </p>
                                                         </div>
                                                     )}
@@ -710,6 +720,7 @@ export default function Items() {
                                                                     <p className="text-sm font-semibold text-[#C89B3C]">
                                                                         {passive.name}
                                                                     </p>
+                                                                    
                                                                     <p className="text-sm text-gray-400/90">
                                                                         {passive.description}
                                                                     </p>

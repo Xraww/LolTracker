@@ -104,7 +104,7 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
             <ProfileHeader summonerData={summonerData} currentVersion={currentVersion} />
 
             {/* Main Content */}
-            <div className="container mx-auto px-4 py-8">
+            <div className="container max-w-[1400px] mx-auto px-4 py-8">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Match History */}
                     <div className="lg:col-span-2">

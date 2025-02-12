@@ -6,18 +6,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { faDiscord } from '@fortawesome/free-brands-svg-icons';
 import { useState, useEffect } from 'react';
-
-const menuItems = [
-    { name: 'Leaderboard', path: '/lol/leaderboard' },
-    { name: 'Search Player', path: '/lol/search-player' },
-    { name: 'Champions', path: '/lol/champions' },
-    { name: 'Items', path: '/lol/items' }
-];
+import { useLanguage } from "@/context/LanguageContext";
 
 const Header = () => {
+    const { t } = useLanguage();
     const pathname = usePathname();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+
+    const menuItems = [
+        { name: t.header.leaderboard, path: '/lol/leaderboard' },
+        { name: t.header.searchPlayer, path: '/lol/search-player' },
+        { name: t.header.champions, path: '/lol/champion' },
+        { name: t.header.items, path: '/lol/items' }
+    ];
 
     useEffect(() => {
         const handleScroll = () => {

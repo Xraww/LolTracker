@@ -1,4 +1,10 @@
 export const fr = {
+    header: {
+        leaderboard: 'Classement',
+        searchPlayer: 'Rechercher un joueur',
+        champions: 'Champions',
+        items: 'Objets',
+    },
     common: {
         search: 'Rechercher',
         leaderboard: 'Classement',
