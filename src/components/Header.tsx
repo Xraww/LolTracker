@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { faDiscord } from '@fortawesome/free-brands-svg-icons';
 import { useState, useEffect } from 'react';
 import { useLanguage } from "@/context/LanguageContext";
@@ -92,10 +92,6 @@ const Header = () => {
                                 <FontAwesomeIcon icon={faDiscord} />
                                 Discord
                             </button>
-
-                            <button className="w-[45px] h-[45px] mx-auto flex items-center justify-center rounded-full border border-white/20 text-white hover:border-white/40 hover:bg-white/5 transition-colors">
-                                <FontAwesomeIcon icon={faUser} className="w-4 h-4" />
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -122,10 +118,6 @@ const Header = () => {
                     <button className="h-[38px] px-4 lg:px-5 flex items-center gap-2 rounded-md font-semibold text-sm text-white bg-[#5865F2] hover:bg-[#4752c4] transition-colors">
                         <FontAwesomeIcon icon={faDiscord} />
                         <span className="hidden lg:inline">Discord</span>
-                    </button>
-                    
-                    <button className="w-[38px] h-[38px] flex items-center justify-center rounded-full border border-white/20 text-white hover:border-white/40 hover:bg-white/5 transition-colors">
-                        <FontAwesomeIcon icon={faUser} className="w-4 h-4" />
                     </button>
                 </div>
             </nav>

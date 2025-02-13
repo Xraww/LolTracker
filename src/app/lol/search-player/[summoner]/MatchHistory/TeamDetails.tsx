@@ -54,6 +54,7 @@ const TeamDetails = ({
                                 height={40}
                                 className="w-10 h-10 rounded-lg border border-[#C89B3C]/30"
                             />
+
                             <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-black/60 rounded-full border border-[#C89B3C] flex items-center justify-center text-xs font-bold">
                                 {p.champLevel}
                             </div>
@@ -67,6 +68,7 @@ const TeamDetails = ({
                             >
                                 {p.riotIdGameName}
                             </Link>
+
                             <div className="flex items-center space-x-1">
                                 <div className="text-xs text-gray-400">{getRankDisplay(p)}</div>
                             </div>
@@ -81,6 +83,7 @@ const TeamDetails = ({
                                 height={20}
                                 className="w-5 h-5 rounded border border-[#C89B3C]/30"
                             />
+
                             <Image
                                 src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/spell/${getSummonerSpellById(p.summoner2Id)}.png`}
                                 alt="Spell 2"
@@ -101,6 +104,7 @@ const TeamDetails = ({
                                     className="w-5 h-5 rounded-full border border-[#C89B3C]/30 bg-black/60"
                                 />
                             )}
+                            
                             {p.perks?.styles[1]?.style && (
                                 <Image
                                     src={`https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/${getRuneStyleById(p.perks.styles[1].style).id}_${getRuneStyleById(p.perks.styles[1].style).name}.png`}

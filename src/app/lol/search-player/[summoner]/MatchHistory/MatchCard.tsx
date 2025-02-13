@@ -55,6 +55,7 @@ const MatchCard = ({
                             height={64}
                             className="w-16 h-16 rounded-lg border border-[#C89B3C]/30"
                         />
+
                         <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-black/60 rounded-full border border-[#C89B3C] flex items-center justify-center text-xs font-bold">
                             {participant.champLevel}
                         </div>
@@ -69,6 +70,7 @@ const MatchCard = ({
                             height={28}
                             className="w-7 h-7 rounded border border-[#C89B3C]/30"
                         />
+
                         <Image
                             src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/spell/${getSummonerSpellById(participant.summoner2Id)}.png`}
                             alt="Summoner Spell 2"
@@ -89,6 +91,7 @@ const MatchCard = ({
                                 className="w-7 h-7 rounded-full border border-[#C89B3C]/30 bg-black/60"
                             />
                         )}
+
                         {secondaryRuneStyle && (
                             <Image
                                 src={`https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/${getRuneStyleById(secondaryRuneStyle).id}_${getRuneStyleById(secondaryRuneStyle).name}.png`}
@@ -107,6 +110,7 @@ const MatchCard = ({
                         <div className={`font-medium ${participant.win ? 'text-[#00FF00]' : 'text-[#FF4655]'}`}>
                             {participant.win ? t.lol.profile.victory : t.lol.profile.defeat}
                         </div>
+
                         <div className="text-sm text-gray-400">
                             {match.info.gameEndTimestamp ? (
                                 <>
@@ -121,6 +125,7 @@ const MatchCard = ({
                     <div className="flex items-center justify-between">
                         <div>
                             <div className="text-[#C89B3C] font-medium">{participant.championName}</div>
+                            
                             <div className="text-sm text-gray-400">
                                 {Math.floor(match.info.gameDuration / 60)}m {match.info.gameDuration % 60}s
                             </div>

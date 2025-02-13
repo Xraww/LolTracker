@@ -155,6 +155,7 @@ export default function Leaderboard() {
                                         <div className="w-20 px-6 text-gray-400 text-lg font-medium">
                                             #{rank}
                                         </div>
+
                                         <div className="flex-1 px-6 flex items-center gap-4">
                                             <div className="relative w-12 h-12 rounded-full overflow-hidden bg-lol-dark border border-lol-gold/20">
                                                 <Image
@@ -166,6 +167,7 @@ export default function Leaderboard() {
                                                     unoptimized
                                                 />
                                             </div>
+
                                             <Link 
                                                 href={entry.gameName && entry.tagLine 
                                                     ? `/lol/search-player/${encodeURIComponent(entry.gameName)}-${encodeURIComponent(entry.tagLine)}?region=${region}`
@@ -175,15 +177,19 @@ export default function Leaderboard() {
                                                 {entry.gameName ? `${entry.gameName} #${entry.tagLine}` : entry.summonerName}
                                             </Link>
                                         </div>
+
                                         <div className="w-32 px-6 text-lg">
                                             {entry.leaguePoints} LP
                                         </div>
+
                                         <div className="w-32 px-6 text-lg">
                                             {calculateWinRate(entry.wins, entry.wins + entry.losses)}
                                         </div>
+
                                         <div className="w-24 px-6 text-lg">
                                             {entry.wins}
                                         </div>
+
                                         <div className="w-24 px-6 text-lg">
                                             {entry.losses}
                                         </div>
@@ -202,9 +208,11 @@ export default function Leaderboard() {
                         >
                             Previous
                         </button>
+
                         <span className="px-4 py-2 text-sm font-medium text-gray-300 bg-gradient-to-br from-black to-lol-dark border border-[#30363D] rounded">
                             Page {page} of {totalPages}
                         </span>
+                        
                         <button
                             onClick={() => handlePageChange(page + 1)}
                             disabled={page >= totalPages}

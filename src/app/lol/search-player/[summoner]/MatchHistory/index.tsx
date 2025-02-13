@@ -157,6 +157,7 @@ const MatchHistory = ({ summonerData, currentVersion, region }: MatchHistoryProp
             <div className="border-b border-[#C89B3C]/30 p-4">
                 <h2 className="text-xl font-bold text-[#C89B3C]">{t.lol.profile.matchHistory}</h2>
             </div>
+
             <div className="p-4">
                 <div className="space-y-4">
                     {isLoadingMatches ? (
@@ -244,7 +245,9 @@ const MatchHistory = ({ summonerData, currentVersion, region }: MatchHistoryProp
                     >
                         {t.lol.profile.previous}
                     </button>
+
                     <span className="text-[#C89B3C]">{t.lol.profile.page} {currentPage}</span>
+                    
                     <button
                         onClick={() => setCurrentPage(prev => prev + 1)}
                         disabled={!hasMore || isLoadingMatches}

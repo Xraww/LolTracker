@@ -31,8 +31,7 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
                 return savedLang;
             }
             
-            const browserLang = navigator.language.split('-')[0];
-            return browserLang === 'en' ? 'en' : 'fr';
+            return 'en';
         }
         return 'en';
     });

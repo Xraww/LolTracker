@@ -14,6 +14,7 @@ const ProfileHeader = ({ summonerData, currentVersion }: ProfileHeaderProps) => 
         <div className="bg-gradient-to-br from-black to-lol-dark border-b border-[#C89B3C]/30">
             <div className="container mx-auto px-4 py-8">
                 <div className="flex flex-col items-center">
+                    
                     {/* Profile Icon and Level */}
                     <div className="relative mb-4">
                         <Image 

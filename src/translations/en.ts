@@ -9,12 +9,15 @@ export const en = {
         search: 'Search',
         leaderboard: 'Leaderboard',
         stats: 'Stats',
+        items: 'Items',
+        champions: 'Champions',
         searchPlayer: 'Search Player',
         explore: 'Explore',
         viewLeaderboards: 'View Leaderboards',
         joinDiscord: 'Join Discord',
         signUp: 'Sign Up',
         noResults: 'No items found matching your criteria',
+        community: 'Community',
     },
     home: {
         hero: {
@@ -30,6 +33,10 @@ export const en = {
             gameStatsDesc: 'Champion statistics with win rates and trends',
             proScene: 'Pro Scene',
             proSceneDesc: 'Follow professional matches and player performances',
+
+            performanceTrackingDesc: 'Real-time tracking',
+            championsDesc: 'Performance analysis',
+            communityDesc: 'Join other players',
         },
         stats: {
             title: 'Statistics',
@@ -151,8 +158,8 @@ export const en = {
             title: 'League of Legends',
             searchPlayer: 'Search Player',
             leaderboard: 'Leaderboard',
-            proMatches: 'Pro Matches',
-            championsStats: 'Champions Stats',
+            champions: 'Champions',
+            items: 'Items',
         },
         community: {
             title: 'Community',

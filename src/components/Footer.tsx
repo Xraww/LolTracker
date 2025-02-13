@@ -3,6 +3,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faGithub, faTwitter, faReddit } from "@fortawesome/free-brands-svg-icons";
 import { useLanguage } from "@/context/LanguageContext";
+import Link from "next/link";
 
 export default function Footer() {
     const { t } = useLanguage();
@@ -40,27 +41,27 @@ export default function Footer() {
 
                         <ul className="space-y-2">
                             <li>
-                                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                                <Link href="/lol/search-player" className="text-gray-400 hover:text-white transition-colors">
                                     {t.footer.leagueOfLegends.searchPlayer}
-                                </a>
+                                </Link>
                             </li>
 
                             <li>
-                                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                                <Link href="/lol/leaderboard" className="text-gray-400 hover:text-white transition-colors">
                                     {t.footer.leagueOfLegends.leaderboard}
-                                </a>
+                                </Link>
                             </li>
 
                             <li>
-                                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                                    {t.footer.leagueOfLegends.proMatches}
-                                </a>
+                                <Link href="/lol/champion" className="text-gray-400 hover:text-white transition-colors">
+                                    {t.header.champions}
+                                </Link>
                             </li>
 
                             <li>
-                                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                                    {t.footer.leagueOfLegends.championsStats}
-                                </a>
+                                <Link href="/lol/items" className="text-gray-400 hover:text-white transition-colors">
+                                    {t.header.items}
+                                </Link>
                             </li>
                         </ul>
                     </div>

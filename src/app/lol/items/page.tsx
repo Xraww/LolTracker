@@ -640,6 +640,7 @@ export default function Items() {
                                                                         <div key={`${category.id}-${item.id}-build-${componentId}-${index}`} className="flex items-center gap-2">
                                                                             <div className="relative w-8 h-8 rounded border border-[#C89B3C]/30">
                                                                                 <div className="absolute inset-0 bg-gradient-to-br from-[#C89B3C]/20 to-black/50" />
+
                                                                                 <Image
                                                                                     src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/item/${component.image.full}`}
                                                                                     alt={component.name}
@@ -648,6 +649,7 @@ export default function Items() {
                                                                                     className="w-full h-full relative z-10 rounded"
                                                                                 />
                                                                             </div>
+                                                                            
                                                                             <span className="text-xs text-gray-400">{component.name}</span>
                                                                         </div>
                                                                     ) : null;

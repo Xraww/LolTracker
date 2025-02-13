@@ -57,44 +57,55 @@ export default function Home() {
                         className="w-[200px] md:w-[280px] lg:w-[320px] object-contain transition-transform duration-300 hover:scale-105 drop-shadow-[0_0_30px_rgba(200,155,60,0.2)]"
                         priority
                     />
+
                     <p className="text-lg sm:text-xl md:text-2xl text-gray-200 max-w-[600px] leading-relaxed font-medium">
                         {t.lol.trackStats}
                     </p>
+
                     <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full sm:w-auto">
                         <Link 
                             href="/lol/search-player"
                             className="w-full sm:w-auto group relative px-6 md:px-8 py-4 bg-lol-gold overflow-hidden rounded-lg transition-all duration-300 hover:shadow-[0_0_20px_rgba(200,155,60,0.3)]"
                         >
                             <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"></div>
+
                             <span className="relative font-semibold text-black text-base md:text-lg">
                                 {t.common.searchPlayer}
                             </span>
                         </Link>
+
                         <Link 
                             href="/lol/leaderboard"
                             className="w-full sm:w-auto group relative px-6 md:px-8 py-4 rounded-lg transition-all duration-300 border-2 border-white/20 hover:border-lol-gold/50"
                         >
                             <div className="absolute inset-0 bg-lol-gold/0 group-hover:bg-lol-gold/10 transition-colors duration-300"></div>
+
                             <span className="relative font-semibold text-white text-base md:text-lg">
                                 {t.common.leaderboard}
                             </span>
                         </Link>
                     </div>
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full max-w-[900px]">
                         <div className="flex flex-col items-center gap-2 px-4 sm:px-6 py-4 bg-black/30 backdrop-blur-sm rounded-xl border border-white/10">
                             <FontAwesomeIcon icon={faChartLine} className="text-lol-gold text-xl md:text-2xl"/>
+
                             <span className="text-white/90 font-medium text-base md:text-lg">{t.common.stats}</span>
-                            <span className="text-sm text-gray-400">Real-time tracking</span>
+                            <span className="text-sm text-gray-400">{t.home.features.performanceTrackingDesc}</span>
                         </div>
+
                         <div className="flex flex-col items-center gap-2 px-4 sm:px-6 py-4 bg-black/30 backdrop-blur-sm rounded-xl border border-white/10">
                             <FontAwesomeIcon icon={faChartPie} className="text-lol-gold text-xl md:text-2xl"/>
-                            <span className="text-white/90 font-medium text-base md:text-lg">Champions</span>
-                            <span className="text-sm text-gray-400">Performance analysis</span>
+
+                            <span className="text-white/90 font-medium text-base md:text-lg">{t.common.champions}</span>
+                            <span className="text-sm text-gray-400">{t.home.features.championsDesc}</span>
                         </div>
+
                         <div className="flex flex-col items-center gap-2 px-4 sm:px-6 py-4 bg-black/30 backdrop-blur-sm rounded-xl border border-white/10 sm:col-span-2 lg:col-span-1">
+
                             <FontAwesomeIcon icon={faUsers} className="text-lol-gold text-xl md:text-2xl"/>
-                            <span className="text-white/90 font-medium text-base md:text-lg">Community</span>
-                            <span className="text-sm text-gray-400">Join other players</span>
+                            <span className="text-white/90 font-medium text-base md:text-lg">{t.common.community}</span>
+                            <span className="text-sm text-gray-400">{t.home.features.communityDesc}</span>
                         </div>
                     </div>
                 </div>
@@ -109,19 +120,36 @@ export default function Home() {
                                 <span className="text-lol-gold text-base sm:text-lg md:text-xl uppercase tracking-[3px] font-semibold mb-4 md:mb-6">
                                     Explore
                                 </span>
+
                                 <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6">
                                     {t.home.hero.title}
                                 </h2>
+
                                 <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-6 sm:mb-8 md:mb-10 max-w-xl leading-relaxed">
                                     {t.home.hero.subtitle}
                                 </p>
+
                                 <div className="flex flex-col sm:flex-row gap-4">
-                                    <button className="w-full sm:w-auto px-6 md:px-8 py-4 bg-lol-gold text-black font-semibold rounded-lg hover:shadow-[0_5px_15px_rgba(200,155,60,0.3)] transition-all duration-300 hover:-translate-y-0.5">
+                                    <Link 
+                                        href="/lol/search-player"
+                                        className="w-full sm:w-auto px-6 md:px-8 py-4 bg-lol-gold text-black font-semibold rounded-lg hover:shadow-[0_5px_15px_rgba(200,155,60,0.3)] transition-all duration-300 hover:-translate-y-0.5"
+                                    >
                                         {t.common.searchPlayer}
-                                    </button>
-                                    <button className="w-full sm:w-auto px-6 md:px-8 py-4 bg-white/10 text-white font-semibold rounded-lg hover:bg-white/20 transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center gap-2">
-                                        {t.common.stats} <FontAwesomeIcon icon={faChevronRight} className="text-sm" />
-                                    </button>
+                                    </Link>
+
+                                    <Link 
+                                        href="/lol/items"
+                                        className="w-full sm:w-auto px-6 md:px-8 py-4 bg-white/10 text-white font-semibold rounded-lg hover:bg-white/20 transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                                    >
+                                        {t.common.items} <FontAwesomeIcon icon={faChevronRight} className="text-sm" />
+                                    </Link>
+
+                                    <Link 
+                                        href="/lol/champion"
+                                        className="w-full sm:w-auto px-6 md:px-8 py-4 bg-white/10 text-white font-semibold rounded-lg hover:bg-white/20 transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                                    >
+                                        {t.common.champions} <FontAwesomeIcon icon={faChevronRight} className="text-sm" />
+                                    </Link>
                                 </div>
                             </div>
 
@@ -136,9 +164,11 @@ export default function Home() {
                                                 icon={feature.icon} 
                                                 className="text-xl sm:text-2xl md:text-3xl mb-3 md:mb-4 text-lol-gold transition-colors"
                                             />
+
                                             <h3 className="text-base sm:text-lg md:text-xl font-semibold mb-2 md:mb-3">
                                                 {t.home.features[feature.translationKey]}
                                             </h3>
+
                                             <p className="text-sm md:text-base text-gray-400 leading-relaxed">
                                                 {t.home.features[feature.descriptionKey]}
                                             </p>
@@ -159,7 +189,9 @@ export default function Home() {
                     <span className="text-lol-gold text-base sm:text-lg md:text-xl uppercase tracking-[3px] font-semibold mb-2 md:mb-4 block">
                         {t.home.stats.title}
                     </span>
+
                     <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-4">{t.home.stats.subtitle}</h2>
+
                     <p className="text-base sm:text-lg md:text-xl text-gray-400 max-w-2xl mx-auto px-4">
                         {t.home.stats.description}
                     </p>
@@ -185,6 +217,7 @@ export default function Home() {
                                 <h3 className="text-lg md:text-xl font-semibold mb-2">
                                     {t.home.stats[stat.translationKey]}
                                 </h3>
+
                                 <p className="text-sm md:text-base text-gray-400 leading-relaxed">
                                     {t.home.stats[stat.descriptionKey]}
                                 </p>
@@ -194,9 +227,9 @@ export default function Home() {
                 </div>
 
                 <div className="flex justify-center mt-8 md:mt-12">
-                    <button className="w-full sm:w-auto px-6 md:px-8 py-4 bg-lol-gold text-black font-semibold rounded-lg hover:shadow-[0_5px_15px_rgba(200,155,60,0.3)] transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center gap-2 mx-4 sm:mx-0">
+                    <Link href="/lol/leaderboard" className="w-full sm:w-auto px-6 md:px-8 py-4 bg-lol-gold text-black font-semibold rounded-lg hover:shadow-[0_5px_15px_rgba(200,155,60,0.3)] transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center gap-2 mx-4 sm:mx-0">
                         {t.common.viewLeaderboards} <FontAwesomeIcon icon={faChevronRight} className="text-sm" />
-                    </button>
+                    </Link>
                 </div>
             </section>
 
@@ -213,6 +246,7 @@ export default function Home() {
                                     <FontAwesomeIcon icon={faChartLine} className="text-2xl md:text-3xl text-lol-gold" />
                                     <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">{t.home.metrics.trackYourJourney}</h2>
                                 </div>
+
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                                     {metrics.map((metric, index) => (
                                         <div 
@@ -220,6 +254,7 @@ export default function Home() {
                                             className="p-4 md:p-6 bg-white/5 rounded-xl md:rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-1 text-center"
                                         >
                                             <FontAwesomeIcon icon={metric.icon} className="text-xl md:text-2xl text-lol-gold mb-2 md:mb-3" />
+
                                             <span className="block text-2xl md:text-3xl font-bold mb-1 md:mb-2">{metric.value}</span>
                                             <p className="text-sm md:text-base text-gray-400">{t.home.metrics[metric.translationKey]}</p>
                                         </div>
@@ -228,7 +263,7 @@ export default function Home() {
                             </div>
 
                             {/* Features List */}
-                            <div className="flex-1 flex flex-col gap-4 md:gap-8">
+                            <div className="flex-1 flex flex-col justify-center gap-4 md:gap-8">
                                 {features2.map((feature, index) => (
                                     <div 
                                         key={index}
@@ -237,10 +272,12 @@ export default function Home() {
                                         <div className="p-3 md:p-4 bg-lol-gold/10 rounded-lg md:rounded-xl">
                                             <FontAwesomeIcon icon={feature.icon} className="text-xl md:text-2xl text-lol-gold" />
                                         </div>
+
                                         <div>
                                             <h4 className="text-lg md:text-xl font-semibold mb-1 md:mb-2">
                                                 {t.home.features2[feature.translationKey]}
                                             </h4>
+
                                             <p className="text-sm md:text-base text-gray-400 leading-relaxed">
                                                 {t.home.features2[feature.descriptionKey]}
                                             </p>
@@ -262,16 +299,15 @@ export default function Home() {
                         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 md:mb-6 text-lol-gold">
                             {t.home.community.title}
                         </h2>
+
                         <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-6 sm:mb-8 md:mb-10">
                             {t.home.community.description}
                         </p>
                     </div>
+                    
                     <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full sm:w-auto px-4">
-                        <button className="w-full sm:w-auto px-6 md:px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-lg hover:bg-white/20 transition-all duration-300 hover:-translate-y-0.5 border border-lol-gold/30 hover:border-lol-gold/50">
-                            {t.common.joinDiscord}
-                        </button>
                         <button className="w-full sm:w-auto px-6 md:px-8 py-4 bg-lol-gold text-black font-semibold rounded-lg hover:shadow-[0_5px_15px_rgba(200,155,60,0.3)] transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center gap-2">
-                            {t.common.signUp} <FontAwesomeIcon icon={faChevronRight} className="text-sm" />
+                            {t.common.joinDiscord}
                         </button>
                     </div>
                 </div>

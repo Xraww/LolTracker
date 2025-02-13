@@ -110,6 +110,7 @@ export default function SearchPlayer() {
                 <div className="absolute top-[20%] right-[25%] w-8 sm:w-12 md:w-16 h-8 sm:h-12 md:h-16 opacity-20 animate-float hidden sm:block">
                     <div className="w-full h-full border-2 border-[#C89B3C] rotate-45" />
                 </div>
+
                 <div className="absolute bottom-[30%] left-[20%] w-6 sm:w-9 md:w-12 h-6 sm:h-9 md:h-12 opacity-20 animate-float-delayed hidden sm:block">
                     <div className="w-full h-full border-2 border-[#C8AA6E] rotate-12" />
                 </div>
@@ -174,6 +175,7 @@ export default function SearchPlayer() {
                                 className="flex-1 px-3 sm:px-6 py-3 sm:py-4 bg-transparent text-[#F0E6D2] text-base sm:text-lg font-medium placeholder:text-[#C8AA6E]/40 focus:outline-none"
                                 disabled={isLoading}
                             />
+
                             <button 
                                 type="submit"
                                 className={`bg-[#C89B3C] px-4 sm:px-8 py-3 sm:py-4 rounded-full transition-all duration-300 hover:bg-[#C8AA6E] hover:-translate-y-0.5 mr-0.5 sm:mr-1 text-[#1E2328] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#C89B3C] disabled:hover:translate-y-0`}
@@ -232,6 +234,7 @@ export default function SearchPlayer() {
                         {summonerData.ranked && summonerData.ranked.length > 0 && (
                             <div className="border-t border-[#C89B3C]/20 pt-4 mt-4">
                                 <h3 className="text-lg font-semibold text-[#C8AA6E] mb-2">Ranked Solo/Duo</h3>
+                                
                                 {summonerData.ranked.map((rank, index) => (
                                     rank.queueType === 'RANKED_SOLO_5x5' && (
                                         <div key={index} className="flex items-center justify-between">
