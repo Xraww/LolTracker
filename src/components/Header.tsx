@@ -48,9 +48,9 @@ const Header = () => {
             <nav className="max-w-[1400px] mx-auto py-3 px-4 md:px-6 flex items-center justify-between relative">
                 {/* Brand */}
                 <Link href="/" className="flex items-center gap-0.5 z-[100]">
-                    <span className="text-lol-gold text-2xl md:text-3xl font-black">GG</span>
-                    <span className="text-white/90 text-2xl md:text-3xl font-black">.</span>
                     <span className="text-white/90 text-2xl md:text-3xl font-black">TRACKER</span>
+                    <span className="text-white/90 text-2xl md:text-3xl font-black">.</span>
+                    <span className="text-lol-gold text-2xl md:text-3xl font-black">GG</span>
                 </Link>
 
                 {/* Hamburger Menu Button (Mobile) */}
