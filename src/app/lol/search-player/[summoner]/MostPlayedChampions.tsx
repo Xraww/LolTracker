@@ -3,6 +3,7 @@
 import { useLanguage } from "@/context/LanguageContext";
 import { CompleteSummonerInfo, MatchData } from '@/types/riot-api';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 interface ChampionStats {
     championId: string;
@@ -113,9 +114,11 @@ const MostPlayedChampions = ({ summonerData, currentVersion, region }: MostPlaye
                                 <div key={champion.championName} className="bg-black/40 backdrop-blur-sm rounded-lg px-2 py-1.5 border border-[#C89B3C]/20 hover:bg-black/60 transition-colors">
                                     <div className="flex items-center w-full">
                                         {/* Champion Icon */}
-                                        <img 
+                                        <Image 
                                             src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/champion/${champion.championName}.png`}
                                             alt={champion.championName}
+                                            width={32}
+                                            height={32}
                                             className="w-8 h-8 rounded-lg flex-shrink-0"
                                         />
                                         

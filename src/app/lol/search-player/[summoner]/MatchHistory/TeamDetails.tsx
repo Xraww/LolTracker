@@ -3,6 +3,7 @@
 import { useLanguage } from "@/context/LanguageContext";
 import { MatchData } from '@/types/riot-api';
 import Link from 'next/link';
+import Image from 'next/image';
 import { getItemName, getSummonerSpellById, getRuneById, getRuneStyleById } from './utils';
 
 interface TeamDetailsProps {
@@ -12,6 +13,7 @@ interface TeamDetailsProps {
     participantPuuid: string;
     playerRanks: { [key: string]: { data: any[], timestamp: number } };
     itemNames: { [key: string]: string };
+    region: string;
 }
 
 const TeamDetails = ({
@@ -20,7 +22,8 @@ const TeamDetails = ({
     currentVersion,
     participantPuuid,
     playerRanks,
-    itemNames
+    itemNames,
+    region
 }: TeamDetailsProps) => {
     const { t } = useLanguage();
 
@@ -43,10 +46,12 @@ const TeamDetails = ({
                 .map((p) => (
                     <div key={p.puuid} className="flex items-center space-x-3 bg-black/30 rounded-lg p-2">
                         <div className="relative">
-                            <img
+                            <Image
                                 src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/champion/${p.championName}.png`}
                                 alt={p.championName}
                                 title={`${p.championName}`}
+                                width={40}
+                                height={40}
                                 className="w-10 h-10 rounded-lg border border-[#C89B3C]/30"
                             />
                             <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-black/60 rounded-full border border-[#C89B3C] flex items-center justify-center text-xs font-bold">
@@ -57,7 +62,7 @@ const TeamDetails = ({
                         {/* Player Info */}
                         <div className="flex flex-col min-w-[150px]">
                             <Link 
-                                href={`/lol/profile/${encodeURIComponent(p.riotIdGameName)}-${encodeURIComponent(p.riotIdTagline)}`}
+                                href={`/lol/search-player/${encodeURIComponent(p.riotIdGameName)}-${encodeURIComponent(p.riotIdTagline)}?region=${region}`}
                                 className="text-sm text-[#C89B3C] hover:underline"
                             >
                                 {p.riotIdGameName}
@@ -69,14 +74,18 @@ const TeamDetails = ({
 
                         {/* Summoner Spells */}
                         <div className="flex space-x-1">
-                            <img
+                            <Image
                                 src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/spell/${getSummonerSpellById(p.summoner1Id)}.png`}
                                 alt="Spell 1"
+                                width={20}
+                                height={20}
                                 className="w-5 h-5 rounded border border-[#C89B3C]/30"
                             />
-                            <img
+                            <Image
                                 src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/spell/${getSummonerSpellById(p.summoner2Id)}.png`}
                                 alt="Spell 2"
+                                width={20}
+                                height={20}
                                 className="w-5 h-5 rounded border border-[#C89B3C]/30"
                             />
                         </div>
@@ -84,16 +93,20 @@ const TeamDetails = ({
                         {/* Runes */}
                         <div className="flex space-x-1 relative">
                             {p.perks?.styles[0]?.selections[0]?.perk && (
-                                <img
+                                <Image
                                     src={`https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/${getRuneById(p.perks.styles[0].selections[0].perk).path}/${getRuneById(p.perks.styles[0].selections[0].perk).key}/${getRuneById(p.perks.styles[0].selections[0].perk).imageName}.png`}
                                     alt="Primary Rune"
+                                    width={20}
+                                    height={20}
                                     className="w-5 h-5 rounded-full border border-[#C89B3C]/30 bg-black/60"
                                 />
                             )}
                             {p.perks?.styles[1]?.style && (
-                                <img
+                                <Image
                                     src={`https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/${getRuneStyleById(p.perks.styles[1].style).id}_${getRuneStyleById(p.perks.styles[1].style).name}.png`}
                                     alt="Secondary Style"
+                                    width={20}
+                                    height={20}
                                     className="w-5 h-5 rounded-full border border-[#C89B3C]/30 bg-black/60"
                                 />
                             )}
@@ -128,10 +141,12 @@ const TeamDetails = ({
                                     .map((itemId, idx) => (
                                         <div key={idx} className="relative w-6 h-6 bg-black/60 rounded">
                                             {itemId > 0 && (
-                                                <img
+                                                <Image
                                                     src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/item/${itemId}.png`}
                                                     alt={getItemName(itemId, itemNames)}
                                                     title={getItemName(itemId, itemNames)}
+                                                    width={24}
+                                                    height={24}
                                                     className="absolute inset-0 w-full h-full object-cover rounded"
                                                 />
                                             )}

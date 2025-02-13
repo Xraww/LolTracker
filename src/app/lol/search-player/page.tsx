@@ -7,6 +7,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { CompleteSummonerInfo } from '@/types/riot-api';
 import { getCurrentLoLVersion, getProfileIconUrl } from '@/lib/api-utils';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function SearchPlayer() {
     const router = useRouter();
@@ -77,7 +78,7 @@ export default function SearchPlayer() {
 
     const navigateToProfile = () => {
         if (summonerData) {
-            router.push(`/lol/profile/${encodeURIComponent(summonerData.account.gameName)}-${encodeURIComponent(summonerData.account.tagLine)}?region=${selectedRegion}`);
+            router.push(`/lol/search-player/${encodeURIComponent(summonerData.account.gameName)}-${encodeURIComponent(summonerData.account.tagLine)}?region=${selectedRegion}`);
         }
     };
 
@@ -208,9 +209,11 @@ export default function SearchPlayer() {
                     >
 
                         <div className="flex items-center space-x-4 mb-4">
-                            <img 
+                            <Image 
                                 src={getProfileIconUrl(summonerData.summoner.profileIconId, currentVersion)}
                                 alt="Profile Icon"
+                                width={64}
+                                height={64}
                                 className="w-16 h-16 rounded-full border-2 border-[#C89B3C] group-hover:border-[#C8AA6E] transition-colors duration-300"
                             />
 
@@ -233,9 +236,11 @@ export default function SearchPlayer() {
                                     rank.queueType === 'RANKED_SOLO_5x5' && (
                                         <div key={index} className="flex items-center justify-between">
                                             <div className="flex items-center gap-2">
-                                                <img 
+                                                <Image 
                                                     src={`/images/game/lol/rank/${rank.tier.toLowerCase()}.png`}
                                                     alt={`${rank.tier} Rank`}
+                                                    width={32}
+                                                    height={32}
                                                     className="w-8 h-8 object-contain"
                                                 />
 

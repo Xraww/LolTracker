@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import { getCurrentLoLVersion } from '@/lib/api-utils';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 
 interface Item {
     id: string;
@@ -534,21 +536,17 @@ export default function Items() {
             <h1 className="text-3xl font-bold mb-6">{t.lol.itemsPage.title}</h1>
 
             {/* Search Input */}
-            <div className="max-w-md mx-auto bg-gradient-to-br from-black to-lol-dark rounded-lg mb-6">
-                <div className="relative">
+            <div className="relative mb-8">
+                <div className="relative max-w-2xl mx-auto">
                     <input
                         type="text"
-                        placeholder={t.common.search}
-                        className="w-full px-4 py-4 rounded bg-black text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#C89B3C] text-sm"
+                        placeholder="Search items..."
+                        className="w-full px-4 py-3 pl-12 bg-black rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-lol-gold focus:border-transparent"
                         value={filters.search}
                         onChange={(e) => setFilters({ search: e.target.value })}
                     />
 
-                    <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-                        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                    </div>
+                    <MagnifyingGlassIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                 </div>
             </div>
 
@@ -583,9 +581,11 @@ export default function Items() {
                                             <div className="w-16 h-16 rounded border border-[#C89B3C]/30 hover:border-[#C89B3C]/60 transition-all duration-300 relative overflow-hidden cursor-pointer">
                                                 <div className="absolute inset-0 bg-gradient-to-br from-[#C89B3C]/20 to-black/50" />
 
-                                                <img
+                                                <Image
                                                     src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/item/${item.image.full}`}
                                                     alt={item.name}
+                                                    width={64}
+                                                    height={64}
                                                     className="w-full h-full relative z-10"
                                                 />
                                             </div>
@@ -610,9 +610,11 @@ export default function Items() {
                                                         <div className="relative">
                                                             <div className="absolute inset-0 bg-gradient-to-br from-[#C89B3C]/20 to-black/50 rounded" />
 
-                                                            <img
+                                                            <Image
                                                                 src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/item/${item.image.full}`}
                                                                 alt={item.name}
+                                                                width={48}
+                                                                height={48}
                                                                 className="w-12 h-12 rounded relative z-10"
                                                             />
                                                         </div>
@@ -638,9 +640,11 @@ export default function Items() {
                                                                         <div key={`${category.id}-${item.id}-build-${componentId}-${index}`} className="flex items-center gap-2">
                                                                             <div className="relative w-8 h-8 rounded border border-[#C89B3C]/30">
                                                                                 <div className="absolute inset-0 bg-gradient-to-br from-[#C89B3C]/20 to-black/50" />
-                                                                                <img
+                                                                                <Image
                                                                                     src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/item/${component.image.full}`}
                                                                                     alt={component.name}
+                                                                                    width={32}
+                                                                                    height={32}
                                                                                     className="w-full h-full relative z-10 rounded"
                                                                                 />
                                                                             </div>

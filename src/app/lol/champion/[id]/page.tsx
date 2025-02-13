@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { getCurrentLoLVersion } from '@/lib/api-utils';
+import Image from 'next/image';
 
 interface ChampionDetails {
     id: string;
@@ -90,9 +91,11 @@ export default async function ChampionDetails({params,}: {params: { id: string }
             {/* Champion Header */}
             <div className="flex items-center gap-6 mb-8">
                 <div className="relative w-32 h-32">
-                    <img
+                    <Image
                         src={`https://ddragon.leagueoflegends.com/cdn/${currentPatch}/img/champion/${champion.image.full}`}
                         alt={champion.name}
+                        width={128}
+                        height={128}
                         className="rounded-full border-4 border-yellow-500"
                     />
                 </div>
@@ -177,9 +180,11 @@ export default async function ChampionDetails({params,}: {params: { id: string }
                 {/* Passive */}
                 <div className="mb-6">
                     <div className="flex items-center gap-4 mb-2">
-                        <img
+                        <Image
                             src={`https://ddragon.leagueoflegends.com/cdn/${currentPatch}/img/passive/${champion.passive.image.full}`}
                             alt={champion.passive.name}
+                            width={48}
+                            height={48}
                             className="w-12 h-12 rounded-lg border border-yellow-500"
                         />
 
@@ -193,9 +198,11 @@ export default async function ChampionDetails({params,}: {params: { id: string }
                 {champion.spells.map((spell, index) => (
                     <div key={spell.id} className="mb-6 last:mb-0">
                         <div className="flex items-center gap-4 mb-2">
-                            <img
+                            <Image
                                 src={`https://ddragon.leagueoflegends.com/cdn/${currentPatch}/img/spell/${spell.image.full}`}
                                 alt={spell.name}
+                                width={48}
+                                height={48}
                                 className="w-12 h-12 rounded-lg border border-yellow-500"
                             />
 
@@ -243,9 +250,11 @@ export default async function ChampionDetails({params,}: {params: { id: string }
                             .filter(skin => skin.name !== "default") // Skip default skin
                             .map((skin) => (
                                 <div key={skin.id} className="relative group">
-                                    <img
+                                    <Image
                                         src={`https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${champion.id}_${skin.num}.jpg`}
                                         alt={skin.name}
+                                        width={400}
+                                        height={192}
                                         className="w-full h-48 object-cover rounded-lg"
                                     />
                                     

@@ -11,7 +11,7 @@ import ChampionMasteries from './ChampionMasteries';
 
 interface ProfilePageProps {
     params: Promise<{
-        slug: string;
+        summoner: string;
     }>;
 }
 
@@ -28,7 +28,7 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
         const fetchSummonerData = async () => {
             try {
                 // Parse the summoner parameter (format: gameName-tagLine)
-                const [gameName, tagLine] = decodeURIComponent(resolvedParams.slug).split('-');
+                const [gameName, tagLine] = decodeURIComponent(resolvedParams.summoner).split('-');
                 if (!gameName || !tagLine) {
                     throw new Error('Invalid summoner name format');
                 }
@@ -64,7 +64,7 @@ const SummonerProfile = ({ params }: ProfilePageProps) => {
         };
 
         fetchSummonerData();
-    }, [resolvedParams.slug]);
+    }, [resolvedParams.summoner]);
 
     if (isLoading) {
         return (

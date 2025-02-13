@@ -2,6 +2,7 @@
 
 import { CompleteSummonerInfo } from '@/types/riot-api';
 import { getProfileIconUrl } from '@/lib/api-utils';
+import Image from 'next/image';
 
 interface ProfileHeaderProps {
     summonerData: CompleteSummonerInfo;
@@ -15,9 +16,11 @@ const ProfileHeader = ({ summonerData, currentVersion }: ProfileHeaderProps) => 
                 <div className="flex flex-col items-center">
                     {/* Profile Icon and Level */}
                     <div className="relative mb-4">
-                        <img 
+                        <Image 
                             src={getProfileIconUrl(summonerData.summoner.profileIconId, currentVersion)}
                             alt="Profile Icon"
+                            width={128}
+                            height={128}
                             className="w-32 h-32 rounded-full border-2 border-[#C89B3C]"
                         />
 
@@ -44,9 +47,11 @@ const ProfileHeader = ({ summonerData, currentVersion }: ProfileHeaderProps) => 
                                     <div key={index} className="flex flex-col items-center space-y-3">
                                         {/* Rank Info */}
                                         <div className="flex items-center space-x-3 bg-[#1E2328]/50 px-6 py-2 rounded-full border border-[#C89B3C]/30">
-                                            <img 
+                                            <Image 
                                                 src={`/images/game/lol/rank/${rank.tier.toLowerCase()}.png`}
                                                 alt={`${rank.tier} Rank`}
+                                                width={32}
+                                                height={32}
                                                 className="w-8 h-8"
                                             />
 

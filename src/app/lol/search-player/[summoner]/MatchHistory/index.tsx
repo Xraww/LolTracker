@@ -204,6 +204,7 @@ const MatchHistory = ({ summonerData, currentVersion, region }: MatchHistoryProp
                                                 participantPuuid={summonerData.summoner.puuid}
                                                 playerRanks={playerRanks}
                                                 itemNames={itemNames}
+                                                region={region}
                                             />
 
                                             {/* Game Stats */}
@@ -220,6 +221,7 @@ const MatchHistory = ({ summonerData, currentVersion, region }: MatchHistoryProp
                                                 participantPuuid={summonerData.summoner.puuid}
                                                 playerRanks={playerRanks}
                                                 itemNames={itemNames}
+                                                region={region}
                                             />
                                         </div>
                                     )}

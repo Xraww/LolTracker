@@ -13,6 +13,7 @@ import {
 import Footer from "@/components/Footer";
 import { useLanguage } from "@/context/LanguageContext";
 import Link from "next/link";
+import Image from 'next/image';
 
 const features = [
     {
@@ -48,10 +49,13 @@ export default function Home() {
                 <div className="absolute inset-0 w-full bg-gradient-to-b from-black via-lol-dark to-black"></div>
 
                 <div className="relative z-10 flex flex-col items-center gap-8 md:gap-12 text-center w-full max-w-[700px] mx-auto px-4">
-                    <img 
+                    <Image 
                         src="/images/game/lol/logo.png" 
                         alt="League of Legends" 
+                        width={320}
+                        height={160}
                         className="w-[200px] md:w-[280px] lg:w-[320px] object-contain transition-transform duration-300 hover:scale-105 drop-shadow-[0_0_30px_rgba(200,155,60,0.2)]"
+                        priority
                     />
                     <p className="text-lg sm:text-xl md:text-2xl text-gray-200 max-w-[600px] leading-relaxed font-medium">
                         {t.lol.trackStats}

@@ -4,6 +4,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { MatchData } from '@/types/riot-api';
 import Link from 'next/link';
 import { formatTimeAgo, getItemName, getSummonerSpellById, getRuneById, getRuneStyleById } from './utils';
+import Image from 'next/image';
 
 interface MatchCardProps {
     match: MatchData;
@@ -47,9 +48,11 @@ const MatchCard = ({
                 {/* Champion Icon and Summoner Spells */}
                 <div className="relative flex">
                     <div className="relative">
-                        <img
+                        <Image
                             src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/champion/${participant.championName}.png`}
                             alt={participant.championName}
+                            width={64}
+                            height={64}
                             className="w-16 h-16 rounded-lg border border-[#C89B3C]/30"
                         />
                         <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-black/60 rounded-full border border-[#C89B3C] flex items-center justify-center text-xs font-bold">
@@ -59,14 +62,18 @@ const MatchCard = ({
                     
                     {/* Summoner Spells */}
                     <div className="flex flex-col justify-between ml-1 my-0.5">
-                        <img
+                        <Image
                             src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/spell/${getSummonerSpellById(participant.summoner1Id)}.png`}
                             alt="Summoner Spell 1"
+                            width={28}
+                            height={28}
                             className="w-7 h-7 rounded border border-[#C89B3C]/30"
                         />
-                        <img
+                        <Image
                             src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/spell/${getSummonerSpellById(participant.summoner2Id)}.png`}
                             alt="Summoner Spell 2"
+                            width={28}
+                            height={28}
                             className="w-7 h-7 rounded border border-[#C89B3C]/30"
                         />
                     </div>
@@ -74,16 +81,20 @@ const MatchCard = ({
                     {/* Runes */}
                     <div className="flex flex-col justify-between ml-1 my-0.5 relative">
                         {primaryRune && (
-                            <img
+                            <Image
                                 src={`https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/${getRuneById(primaryRune).path}/${getRuneById(primaryRune).key}/${getRuneById(primaryRune).imageName}.png`}
                                 alt="Primary Rune"
+                                width={28}
+                                height={28}
                                 className="w-7 h-7 rounded-full border border-[#C89B3C]/30 bg-black/60"
                             />
                         )}
                         {secondaryRuneStyle && (
-                            <img
+                            <Image
                                 src={`https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/${getRuneStyleById(secondaryRuneStyle).id}_${getRuneStyleById(secondaryRuneStyle).name}.png`}
                                 alt="Secondary Rune Style"
+                                width={28}
+                                height={28}
                                 className="w-7 h-7 rounded-full border border-[#C89B3C]/30 bg-black/60"
                             />
                         )}
@@ -124,10 +135,12 @@ const MatchCard = ({
                                     .map((p, idx) => (
                                         <div key={idx} className="relative">
                                             <Link href={`/lol/profile/${encodeURIComponent(p.riotIdGameName)}-${encodeURIComponent(p.riotIdTagline)}?region=${region}`}>
-                                                <img
+                                                <Image
                                                     src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/champion/${p.championName}.png`}
                                                     alt={p.championName}
                                                     title={`${p.championName} - ${p.riotIdGameName}`}
+                                                    width={32}
+                                                    height={32}
                                                     className={`w-8 h-8 rounded-full border ${p.puuid === participant.puuid ? 'border-[#C89B3C]' : 'border-[#C89B3C]/30'} cursor-pointer hover:border-[#C89B3C] transition-colors`}
                                                 />
                                             </Link>
@@ -145,10 +158,12 @@ const MatchCard = ({
                                     .map((p, idx) => (
                                         <div key={idx}>
                                             <Link href={`/lol/profile/${encodeURIComponent(p.riotIdGameName)}-${encodeURIComponent(p.riotIdTagline)}?region=${region}`}>
-                                                <img
+                                                <Image
                                                     src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/champion/${p.championName}.png`}
                                                     alt={p.championName}
                                                     title={`${p.championName} - ${p.riotIdGameName}`}
+                                                    width={32}
+                                                    height={32}
                                                     className="w-8 h-8 rounded-full border border-[#C89B3C]/30 cursor-pointer hover:border-[#C89B3C] transition-colors"
                                                 />
                                             </Link>
@@ -188,10 +203,12 @@ const MatchCard = ({
                                     className="w-6 h-6 bg-black/60 rounded border border-[#C89B3C]/30"
                                 >
                                     {itemId > 0 && (
-                                        <img
+                                        <Image
                                             src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/item/${itemId}.png`}
                                             alt={getItemName(itemId, itemNames)}
                                             title={getItemName(itemId, itemNames)}
+                                            width={24}
+                                            height={24}
                                             className="w-full h-full rounded"
                                         />
                                     )}
@@ -203,10 +220,12 @@ const MatchCard = ({
                         <div className="ml-4">
                             <div className="w-6 h-6 bg-black/60 rounded border border-[#C89B3C]/30">
                                 {participant.item6 > 0 && (
-                                    <img
+                                    <Image
                                         src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/item/${participant.item6}.png`}
                                         alt={getItemName(participant.item6, itemNames)}
                                         title={getItemName(participant.item6, itemNames)}
+                                        width={24}
+                                        height={24}
                                         className="w-full h-full rounded"
                                     />
                                 )}

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useLanguage } from "@/context/LanguageContext";
 import { CompleteSummonerInfo } from '@/types/riot-api';
+import Image from 'next/image';
 
 interface ChampionMasteriesProps {
     summonerData: CompleteSummonerInfo;
@@ -136,9 +137,11 @@ const ChampionMasteries = ({ summonerData, currentVersion, region }: ChampionMas
                             <div key={mastery.championId} className="bg-black/40 backdrop-blur-sm rounded-lg p-3 flex items-center space-x-4 border border-[#C89B3C]/20 hover:bg-black/60 transition-colors">
                                 {/* Champion Icon */}
                                 <div className="relative">
-                                    <img
+                                    <Image
                                         src={`https://ddragon.leagueoflegends.com/cdn/${currentVersion}/img/champion/${champion.id}.png`}
                                         alt={champion.name}
+                                        width={48}
+                                        height={48}
                                         className="w-12 h-12 rounded-lg border border-[#C89B3C]/30"
                                     />
                                 </div>
@@ -157,9 +160,11 @@ const ChampionMasteries = ({ summonerData, currentVersion, region }: ChampionMas
                                     {/* Second Row: Mastery Level and Last Played */}
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center space-x-1">
-                                            <img 
+                                            <Image 
                                                 src={`/images/game/lol/masteries/mastery-${mastery.championLevel > 10 ? 10 : mastery.championLevel}.png`}
                                                 alt={`Mastery ${mastery.championLevel}`}
+                                                width={20}
+                                                height={20}
                                                 className="w-5 h-5"
                                             />
 

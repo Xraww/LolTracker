@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { getCurrentLoLVersion } from '@/lib/api-utils';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface Champion {
     id: string;
@@ -131,9 +132,11 @@ export default function Champions() {
                                     href={`/lol/champion/${champion.id}`}
                                     className="bg-white bg-gradient-to-br from-black to-lol-dark rounded-lg p-3 flex flex-col items-center hover:shadow-lg transition-all duration-300 cursor-pointer hover:text-lol-gold"
                                 >
-                                    <img
+                                    <Image
                                         src={`https://ddragon.leagueoflegends.com/cdn/${currentPatch}/img/champion/${champion.id}.png`}
                                         alt={champion.name}
+                                        width={64}
+                                        height={64}
                                         className="w-16 h-16 rounded-full mb-2"
                                     />
                                     
